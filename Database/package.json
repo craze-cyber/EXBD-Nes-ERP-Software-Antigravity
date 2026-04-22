@@ -1,0 +1,9 @@
+{
+  "name": "@sovereign/database",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "@insforge/sdk": "^1.2.5"
+  }
+}

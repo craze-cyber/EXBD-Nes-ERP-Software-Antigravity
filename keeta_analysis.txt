@@ -1,0 +1,351 @@
+=== WORKBOOK INFO ===
+Sheets: ["ksa_payable","reference","Summary_KSA","Invalid Summary_KSA","Help","Riyadh","Pivot Table 9","Invoice","Guidelines"]
+
+
+====================================================================================================
+=== Sheet: "ksa_payable" ===
+====================================================================================================
+Range: A1:X17500
+Rows: 17500, Cols: 24
+
+--- ALL ROWS (17500 total) ---
+Row 0: ["SPO",2000,"","","","","","","","","","","","","","","","","","","","","",""]
+Row 1: ["OUT",5500,"","","","","","","","","","","","","","","","","","","","","",""]
+Row 3: ["Partner ID","Partner Name","Billing Cycle","Courier ID","Courier name","Is Valid","Reason","Online Days-Valid","Daily Onlines Hours-Valid","Daily Onlines Hours During Peak Time -Valid","Delivered Orders","Order-Based pricing","Distance from price increase.","Valid DA Capacity Incentives","Experience incentive","DXGY","Subsidy","Activities and other rewards","Deduction","food compensation","Other Adjustment","Tips (excluding tax)","TGA Deduction(VAT Excluded)","Total payable amount"]
+Row 4: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1766343526237144","MUFEES MUHAMMAD","invalid","online days did not meet requirements",26,10.14,0,183,1688.5,0,0,0,0,0,0,-580,0,0,0,0,"SAR 1,108.50"]
+Row 5: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1765225459202918","Talha Muhammad","invalid","online days did not meet requirements",24,10.17,0,234,2207,0,0,0,0,0,0,0,-177,0,0,0,"SAR 2,030.00"]
+Row 6: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1764454531206206","AHMED SAJIB","valid","other reason",25,10.92,0,533,5829,0,0,1923.08,0,0,0,-70,-79,0,0,0,"SAR 7,603.08"]
+Row 7: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1765222245257777","HAMID MIA SABBIR","valid","other reason",26,11.02,0,314,3068,0,0,1000,0,0,0,0,-112.5,0,0,0,"SAR 3,955.50"]
+Row 8: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1768953329088507","ADAMBAWA MOHAMED","-","-","-","-","-",0,0,0,0,0,0,0,0,0,-41,0,0,0,"-SAR 41.00"]
+Row 9: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1765212224088936","Chowdury Shibli","invalid","online days did not meet requirements",24,10.62,0,170,1565,0,0,0,0,0,0,-90,-114.25,0,0,0,"SAR 1,360.75"]
+Row 10: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1766430539202821","ASGHAR ASIF","valid","other reason",26,10.6,0,319,3128,0,0,1000,0,0,0,-80,-294,0,0,0,"SAR 3,754.00"]
+Row 11: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1765017691060624","THUVAN NESAIYARAJAN","valid","other reason",25,9.87,0,262,2501,0,0,961.54,0,0,0,-100,-31,0,0,0,"SAR 3,331.54"]
+Row 12: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1764862455480141","ISLAM MD FAKHRUL","invalid","online days did not meet requirements",25,10.23,0,230,2165,0,0,0,0,0,0,-60,-104.15,0,0,0,"SAR 2,000.85"]
+Row 13: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1763492371202007","KHAN UMAR","invalid","online days did not meet requirements",0,1.04,0,4,36,0,0,0,0,0,0,-200,-223.13,0,0,0,"-SAR 387.13"]
+Row 14: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1765961421257092","KUNASEKARAM PIRASANTHAN","invalid","online days did not meet requirements",23,10,0,190,1755,0,0,0,0,0,0,-310,-19.5,0,0,0,"SAR 1,425.50"]
+Row 15: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1763487278480524","HOSSAIN SAKHAWAT","valid","other reason",27,11.01,0,352,3524,0,0,1500,0,0,0,-50,0,0,0,0,"SAR 4,974.00"]
+Row 16: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1763477875202836","NIL RASEL AHMED NIL","valid","other reason",27,10.78,0,466,4958,0,0,1500,0,0,0,-70,-35.65,0,0,0,"SAR 6,352.35"]
+Row 17: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1763489127202585","HASAN MOHAMMAD HASAN","valid","other reason",25,10.55,0,272,2606,0,0,961.54,0,0,0,0,0,0,0,0,"SAR 3,567.54"]
+Row 18: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1764594439237630","ALI QAISER","invalid","online days did not meet requirements",25,10.54,0,227,2133.5,0,0,0,0,0,0,0,-193.5,0,0,0,"SAR 1,940.00"]
+Row 19: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1765457667237405","Abdulrm Riyasath","invalid","online days did not meet requirements",15,10.37,0,140,1280,0,0,0,0,0,0,-370,-34.4,0,0,0,"SAR 875.60"]
+Row 20: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1764861630480419","MOMEN ABDUL","invalid","online days did not meet requirements",25,10.03,0,355,3560,0,0,0,0,0,0,0,0,0,0,0,"SAR 3,560.00"]
+Row 21: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1766262281257875","Rahman Md","invalid","online days did not meet requirements",24,10.81,0,231,2175.5,0,0,0,0,0,0,-70,-46.65,0,0,0,"SAR 2,058.85"]
+Row 22: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1764086694257633","ALI IMRAN","invalid","online days did not meet requirements",3,11.25,0,48,432,0,0,0,0,0,0,-10,0,0,0,0,"SAR 422.00"]
+Row 23: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1764088049060859","KAZI MD","valid","other reason",26,10.24,0,266,2543,0,0,1500,0,0,0,-50,0,0,0,0,"SAR 3,993.00"]
+Row 24: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1764669111088485","Ahmed Shahbaz","invalid","online days did not meet requirements",0,6,0,14,126,0,0,0,0,0,0,0,0,0,0,0,"SAR 126.00"]
+Row 25: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1764089300237420","ISLAM MD SHARIFUL","valid","other reason",25,9.44,0,449,4737,0,0,1442.31,0,0,0,-100,-38,0,0,0,"SAR 6,041.31"]
+Row 26: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1763474492060808","RAHMAN MD SABBIR RAHMAN","invalid","online days did not meet requirements",21,10.39,0,446,4698,0,0,0,0,0,0,-100,-137.5,0,0,0,"SAR 4,460.50"]
+Row 27: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1764091098206531","Hasan Mehedi","valid","other reason",27,11.06,0,299,2889.5,0,0,1000,0,0,0,-70,-68.5,0,0,0,"SAR 3,751.00"]
+Row 28: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1768954041237552","MIA MD","invalid","online days did not meet requirements",24,10.57,0,207,1923.5,0,0,0,0,0,0,-150,0,0,0,0,"SAR 1,773.50"]
+Row 29: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1765171041060386","Khurshid Khan Muhammad yousaf","invalid","online days did not meet requirements",26,10.51,0,235,2217.5,0,0,0,0,0,0,-40,0,0,0,0,"SAR 2,177.50"]
+Row 30: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1764598028480232","SAIMON SAIFUL","valid","other reason",26,10.94,0,250,2375,0,0,1500,0,0,0,0,0,0,0,0,"SAR 3,875.00"]
+Row 31: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1763480462257997","ABBASI RAHEEL","invalid","online days did not meet requirements",25,10.78,0,208,1934,0,0,0,0,0,0,-70,0,0,0,0,"SAR 1,864.00"]
+Row 32: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1769819696237398","M S ISMAIL MOHAMED HASAN","valid","other reason",27,10.86,0,261,2490.5,0,0,0,0,0,0,-230,-133.74,0,0,0,"SAR 2,126.76"]
+Row 33: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1764605716202362","HOSSAN GOLAM","invalid","online days did not meet requirements",26,11.26,0,198,1831,0,0,0,0,0,0,-50,0,0,0,0,"SAR 1,781.00"]
+Row 34: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1763488561206006","HASAN MD MAHADI HASAN","valid","other reason",26,10.44,0,321,3152,0,0,1000,0,0,0,-20,-114.31,0,0,0,"SAR 4,017.69"]
+Row 35: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1764606204060877","MUHAMMAD SAGHEER MUHAMMAD NAZEER","invalid","online days did not meet requirements",0,2.3,0,8,72,0,0,0,0,0,0,0,0,0,0,0,"SAR 72.00"]
+Row 36: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1765796379060502","HOSSEN MD MILON","valid","other reason",24,9.53,0,356,3572,0,0,0,0,0,0,-30,-69,0,0,0,"SAR 3,473.00"]
+Row 37: ["1725980422299407","Establishment HILK AL-KHASS for Transporting Parcels ( Riyadh )","Feb 2026","1765795341480367","AHMAD AMJAD","valid","other reason",26,12.62,0,367,3704,0,0,2000,0,0,0,0,0,0,0,0,"SAR 5,704.00"]
+Row 50: ["","","",""," "," "," "," ","","","","","","","","","","","","","","","",""]
+
+====================================================================================================
+=== Sheet: "reference" ===
+====================================================================================================
+Range: A1:V999
+Rows: 999, Cols: 22
+
+--- ALL ROWS (999 total) ---
+Row 0: ["ID","Courier Name","ORDER","REJECTION","ID Type","Real Id User Name","ID User Iqama","Rider Type","Mobile number","Work Started","Last Worked","Advance","Violation Type","Violation Number","Car Number","Date and Time Of violation","Number Of Violations","Violation Amount","IBAN","ID","REAL ID",""]
+Row 1: ["1764861630480419","MOMIN",355,1,"SLAB","MOMIN",2571373618,"SPO",536367434,46024,"28/2/2026","","","","","","","","SA4080000857608015673664","","Momen Abdul","Momen Abdul"]
+Row 2: ["1763477875202836","RESAL NIL",466,6,"SLAB","RESAL NIL",2577580570,"SPO",570904183,46024,"28/2/2026","","","","","","","","SA3180000856608013880734","","Nil Rasel Ahmed Nil","Nil Rasel Ahmed Nil"]
+Row 3: ["1764605716202362","GOLAM HOSSAIN",198,4,"SLAB","GOLAM HOSSAIN",2607518384,"SPO",558431377,46024,"28/2/2026","","","","","","","","SA3980000859608018589790","","Hossan Golam","Hossan Golam"]
+Row 4: ["1766262281257875","MD.RAHMAN REPON",231,20,"SLAB","MD.RAHMAN REPON",2593268036,"SPO",530061712,46024,"28/2/2026","","","","","","","","SA5380000857608015612414","","Rahman Md","Rahman Md"]
+Row 5: ["1765171041060386","YOUSAF",235,2,"SLAB","YOUSAF",2588602652,"SPO",547991249,46024,"28/2/2026","","","","","","","","SA7380000857608017286762","","Khurshid Khan Muhammad Yousaf","Khurshid Khan Muhammad Yousaf"]
+Row 6: ["1764594439237630","QAISAR",227,0,"SLAB","QAISAR",2584277251,"SPO",578640800,46024,"28/2/2026","","","","","","","","SA2930400108093106270010","","Ali Qaiser","Ali Qaiser"]
+Row 7: ["1765212224088936","Shibli Chowdury",170,1,"SLAB","Shibli Chowdury",2584035014,"SPO",547897922,46024,"28/2/2026","","","","","","","","SA1680000865608015577375","","Chowdury Shibli","Chowdury Shibli"]
+Row 8: ["1765457667237405","Riyasath Abdulrm",140,0,"SLAB","Riyasath Abdulrm",2618080648,"SPO",535857178,46024,"28/2/2026","","","","","","","","SA2780000866608012715142","","Abdulrm Riyasath","Abdulrm Riyasath"]
+Row 9: ["1765017691060624","NESAIYARAJAN",262,0,"SLAB","NESAIYARAJAN",2617987660,"SPO",551696768,46024,"28/2/2026","","","","","","","","SA5680000866608012737609","","Thuvan Nesaiyarajan","Thuvan Nesaiyarajan"]
+Row 10: ["1766343526237144","MUHAMMAD MUFEES",183,0,"SLAB","MUHAMMAD MUFEES",2619201243,"SPO",554324187,46024,"28/2/2026","","","","","","","","SA9380000866608018154296","","Mufees Muhammad","Mufees Muhammad"]
+Row 11: ["1763474492060808","SABBIR RAHMAN",446,0,"SLAB","SABBIR RAHMAN",2595809787,"SPO",573032491,46024,"28/2/2026","","","","","","","","SA6378000000001255088005","","Rahman Md Sabbir Rahman","Rahman Md Sabbir Rahman"]
+Row 12: ["1765225459202918","TALHA",234,0,"SLAB","TALHA",2605827068,"SPO",531061499,46024,"28/2/2026","","","","","","","","SA6280000865608010380742","","Talha Muhammad","Talha Muhammad"]
+Row 13: ["1764088049060859","MD KAZI",239,3,"SLAB","MD KAZI",2617805052,"SPO",5735423906,46024,"28/2/2026","","","","","","","","SA7880000866608012710150","","Kazi Md","Kazi Md"]
+Row 14: ["1764089300237420","SHARIFUL",449,27,"SLAB","SHARIFUL",2617805128,"SPO",546634127,46024,"28/2/2026","","","","","","","","SA3680000866608012771046","","Islam Md Shariful","Islam Md Shariful"]
+Row 15: ["1765796379060502","MILON",356,0,"SLAB","MILON",2569416775,"SPO",574152791,46024,"28/2/2026","","","","","","","","SA7580000856608015137935","","Hossen Md Milon","Hossen Md Milon"]
+Row 16: ["1765222245257777","SABBIR HAMID",314,3,"SLAB","SABBIR HAMID",2588556163,"SPO",541835195,46024,"28/2/2026","","","","","","","","NO ACCOUNT","","Hamid Mia Sabbir","Hamid Mia Sabbir"]
+Row 17: ["1763489127202585","MOH. HASAN",272,0,"SLAB","MOH. HASAN",2607518236,"SPO",533036159,46024,"28/2/2026","","","","","","","","SA0980000859608019964141","","Hasan Mohammad Hasan","Hasan Mohammad Hasan"]
+Row 18: ["1764086694257633","IMRAN ALI",48,0,"SLAB","IMRAN ALI",2546805942,"SPO",572276773,46024,46083,"","","","","","","","NO ACCOUNT","","Ali Imran","Ali Imran"]
+Row 19: ["1763480462257997","RAHEEL ABBASI",208,3,"SLAB","RAHEEL ABBASI",2605826102,"SPO",536774358,46024,"28/2/2026","","","","","","","","SA578000086560801375 5171","","Abbasi Raheel","Abbasi Raheel"]
+Row 20: ["1764598028480232","SAIFUL SAYMON",250,6,"SLAB","SAIFUL SAYMON",2578734028,"SPO",551629983,46024,"28/2/2026","","","","","","","","SA3980000858608012823675","","Saimon Saiful","Saimon Saiful"]
+Row 21: ["1765961421257092","PRASANT",190,0,"SLAB","PRASANT",2619201409,"SPO",507640783,46024,"28/2/2026","","","","","","","","HOLD HIS SALARY","","Kunasekaram Pirasanthan","Kunasekaram Pirasanthan"]
+Row 22: ["1763488561206006","MAHADI HASAN",236,23,"SLAB","MAHADI HASAN",2607518160,"SPO",552786536,46024,"28/2/2026","","","","","","","","SA0578000000001265056187","","Hasan Md Mahadi Hasan","Hasan Md Mahadi Hasan"]
+Row 23: ["1763487278480524","SAKHAWAT HOSSAIN",352,1,"SLAB","SAKHAWAT HOSSAIN",2614087993,"SPO",571078268,46024,"28/2/2026","","","","","","","","SA9178000000001261607065","","Hossain Sakhawat","Hossain Sakhawat"]
+Row 24: ["1764862455480141","FAKRUL ISLAM",230,32,"SLAB","FAKRUL ISLAM",2607517998,"SPO",530129585,46024,"28/2/2026","","","","","","","","SA4780000858608014218973","","Islam Md Fakhrul","Islam Md Fakhrul"]
+Row 25: ["1769819696237398","HASAN SRI LANKA/ABDULLAH",262,0,"SLAB","HASAN SRI LANKA/ABDULLAH",2621473517,"SPO",530817132,46024,"28/2/2026","","","","","","","","HOLD HIS SALARY","","HASAN SRI LANKA/ABDULLAH","HASAN SRI LANKA/ABDULLAH"]
+Row 26: ["1764454531206206","SAJIB",532,8,"SLAB","SAJIB",2587214855,"SPO",501573646,46024,"28/2/2026","","","","","","","","SA3880000858608017895629","","Ahmed Sajib","Ahmed Sajib"]
+Row 27: ["1764091098206531","MEHEDI 2",299,4,"SLAB","MEHEDI 2",2617805144,"SPO",540811867,46024,"28/2/2026","","","","","","","","SA6580000866608015375944","","Hasan Mehedi","Hasan Mehedi"]
+Row 28: ["1766430539202821","ASIF",319,0,"SLAB","ASIF",2478284223,"SPO",547897922,46024,"28/2/2026","","","","","","","","SA1680000865608015577375","","Asghar Asif","Asghar Asif"]
+Row 29: ["1765795341480367","AMJAD",314,0,"SLAB","AMJAD",2470815578,"SPO",567215058,46024,"28/2/2026","","","","","","","","SA3980000640608013688466","","Ahmad Amjad","Ahmad Amjad"]
+Row 30: ["1768954041237552","MD MASUK MIAH",207,38,"SLAB","MD MASUK MIAH",2617979444,"SPO",573543886,46024,"28/2/2026","","","","","","","","SA0980000866608017412885","","Mia Md","Mia Md"]
+
+====================================================================================================
+=== Sheet: "Summary_KSA" ===
+====================================================================================================
+Range: A1:AE9270
+Rows: 9270, Cols: 31
+
+--- ALL ROWS (9270 total) ---
+Row 0: ["","Start date",46054,"","End Date",46081,"",28,"","",6886,0,"","","",45776.42857,"","",55743.42857,690,3303,1114,3839.047616,3750,-2770,-1802.65,2801,35673.73096,"","",""]
+Row 1: ["Region","id","Id name","Real Rider Name","ID User Iqama","Business Unit","Designation","Location","VENDOR ","Basic Salary","Order Delivered ","Delivered by Reliver","Total Orders ","OT Orders","Status ","Salary","Incentive from nafouz","Net Bill","Total Salary","Iqama Renewal","Traffic violation","Vehicle Repairing Cost","Driving License Cost","Advance Amount","Deduction","food compensation","Internal Penalty","Total Payable ","IBAN","Salary Status","Signature"]
+Row 2: ["Riyadh","1766343526237144","Mufees Muhammad","Mufees Muhammad",2619201243,"Keeta","Driver","Riyadh","SPO",2000,183,"",183,-167,"invalid",915,"",200,1115,0,225,0,307.14285714285717,400,-580,0,100,-497.1428571,"SA9380000866608018154296","",""]
+Row 3: ["Riyadh","1765225459202918","Talha Muhammad","Talha Muhammad",2605827068,"Keeta","Driver","Riyadh","SPO",2000,234,"",234,-116,"invalid",1170,"",200,1370,346,"",0,0,"",0,-177,"",847,"SA6280000865608010380742","",""]
+Row 4: ["Riyadh","1764454531206206","Ahmed Sajib","Ahmed Sajib",2587214855,"Keeta","Driver","Riyadh","SPO",2000,533,"",533,183,"valid",2915,"",200,3115,0,"",314,0,150,-70,-79,100,2402,"Hand cash","",""]
+Row 5: ["Riyadh","1765222245257777","Hamid Mia Sabbir","Hamid Mia Sabbir",2588556163,"Keeta","Driver","Riyadh","SPO",2000,314,"",314,-36,"valid",1794.285714,"",200,1994.285714,0,150,0,0,100,0,-112.5,"",1631.785714,"Hand cash","",""]
+Row 6: ["Riyadh","1765212224088936","Chowdury Shibli","Chowdury Shibli",2584035014,"Keeta","Driver","Riyadh","SPO",2000,170,"",170,-180,"invalid",850,"",200,1050,0,"",0,0,300,-90,-114.25,500,45.75,"SA1680000865608015577375","",""]
+Row 7: ["Riyadh","1766430539202821","Asghar Asif","Asghar Asif",2478284223,"Keeta","Driver","Riyadh","SPO",2000,319,"",319,-31,"valid",1822.857143,276,200,2298.857143,0,"",0,0,100,-80,-294,100,1724.857143,"SA1680000865608015577375","",""]
+Row 8: ["Riyadh","1765017691060624","Thuvan Nesaiyarajan","Thuvan Nesaiyarajan",2617987660,"Keeta","Driver","Riyadh","SPO",2000,262,"",262,-88,"valid",1497.142857,"",200,1697.142857,0,"",0,320,100,-100,-31,50,1096.142857,"SA5680000866608012737609","",""]
+Row 9: ["Riyadh","1764862455480141","Islam Md Fakhrul","Islam Md Fakhrul",2607517998,"Keeta","Driver","Riyadh","SPO",2000,230,"",230,-120,"invalid",1150,638,200,1988,0,"",0,333.33333,100,-60,-104.15,"",1390.51667,"SA4780000858608014218973","",""]
+Row 10: ["Riyadh","1765961421257092","Kunasekaram Pirasanthan","Kunasekaram Pirasanthan",2619201409,"Keeta","Driver","Riyadh","SPO",2000,190,"",190,-160,"invalid",950,"",200,1150,0,"",0,307.14285714285717,100,-310,-19.5,50,363.3571429,"HOLD HIS SALARY","hold",""]
+Row 11: ["Riyadh","1763487278480524","Hossain Sakhawat","Hossain Sakhawat",2614087993,"Keeta","Driver","Riyadh","SPO",2000,352,"",352,2,"valid",2510,300,200,3010,0,226,0,333.3333333,200,-50,0,"",2200.666667,"Hand Cash","",""]
+Row 12: ["Riyadh","1763477875202836","Nil Rasel Ahmed Nil","Nil Rasel Ahmed Nil",2577580570,"Keeta","Driver","Riyadh","SPO",2000,466,"",466,116,"valid",2580,"",200,2780,0,"",300,0,100,-70,-35.65,"",2274.35,"SA3180000856608013880734","",""]
+Row 13: ["Riyadh","1763489127202585","Hasan Mohammad Hasan","Hasan Mohammad Hasan",2607518236,"Keeta","Driver","Riyadh","SPO",2000,272,"",272,-78,"valid",1554.285714,"",200,1754.285714,0,75,0,0,100,0,0,100,1479.285714,"Hand cash","",""]
+Row 14: ["Riyadh","1764594439237630","Ali Qaiser","Ali Qaiser",2584277251,"Keeta","Driver","Riyadh","SPO",2000,227,"",227,-123,"invalid",1135,"",200,1335,0,"",500,0,100,0,-193.5,150,391.5,"Hand cash","",""]
+Row 15: ["Riyadh","1765457667237405","Abdulrm Riyasath","Abdulrm Riyasath",2618080648,"Keeta","Driver","Riyadh","SPO",2000,140,"",140,-210,"invalid",700,"",200,900,0,450,0,320,100,-370,-34.4,600,-974.4,"SA2780000866608012715142","",""]
+Row 16: ["Riyadh","1764861630480419","Momen Abdul","Momen Abdul",2571373618,"Keeta","Driver","Riyadh","SPO",2000,355,"",355,5,"invalid",1775,"",200,1975,0,"",0,0,"",0,0,50,1925,"Hand cash","",""]
+Row 17: ["Riyadh","1766262281257875","Rahman Md","Rahman Md",2593268036,"Keeta","Driver","Riyadh","SPO",2000,231,"",231,-119,"invalid",1155,838,200,2193,0,113,0,0,400,-70,-46.65,"",1563.35,"SA5380000857608015612414","",""]
+Row 18: ["Riyadh","1764086694257633","Ali Imran","Ali Imran",2546805942,"Keeta","Driver","Riyadh","SPO",2000,48,"",48,-302,"invalid",240,"",200,440,0,"",0,0,150,-10,0,"",280,"Hand cash","",""]
+Row 19: ["Riyadh","1764088049060859","Kazi Md","Kazi Md",2617805052,"Keeta","Driver","Riyadh","SPO",2000,266,"",266,-84,"valid",1520,"",200,1720,0,600,0,307.1428571,100,-50,0,"",662.8571428,"Hand cash","",""]
+Row 20: ["Riyadh","1764089300237420","Islam Md Shariful","Islam Md Shariful",2617805128,"Keeta","Driver","Riyadh","SPO",2000,449,"",449,99,"valid",2495,"",200,2695,0,113,0,330,150,-100,-38,"",1964,"Hand cash","",""]
+Row 21: ["Riyadh","1763474492060808","Rahman Md Sabbir Rahman","Rahman Md Sabbir Rahman",2595809787,"Keeta","Driver","Riyadh","SPO",2000,446,"",446,96,"invalid",2230,900,200,3330,0,"",0,0,100,-100,-137.5,"",2992.5,"Hand cash","",""]
+Row 22: ["Riyadh","1764091098206531","Hasan Mehedi","Hasan Mehedi",2617805144,"Keeta","Driver","Riyadh","SPO",2000,299,"",299,-51,"valid",1708.571428,225,200,2133.571428,0,"",0,307.1428571,"",-70,-68.5,"",1687.928571,"Hand cash","",""]
+Row 23: ["Riyadh","1768954041237552","Mia Md","Mia Md",2617979444,"Keeta","Driver","Riyadh","SPO",2000,207,"",207,-143,"invalid",1035,"",200,1235,0,225,0,307.14285714285717,100,-150,0,801,-348.1428571,"SA0980000866608017412885","",""]
+Row 24: ["Riyadh","1765171041060386","Khurshid Khan Muhammad Yousaf","Khurshid Khan Muhammad Yousaf",2588602652,"Keeta","Driver","Riyadh","SPO",2000,235,"",235,-115,"invalid",1175,"",200,1375,0,"",0,0,100,-40,0,150,1085,"SA7380000857608017286762","",""]
+Row 25: ["Riyadh","1764598028480232","Saimon Saiful","Saimon Saiful",2578734028,"Keeta","Driver","Riyadh","SPO",2000,250,"",250,-100,"valid",1428.571429,"",200,1628.571429,0,150,0,0,100,0,0,"",1378.571429,"SA3980000858608012823675","",""]
+Row 26: ["Riyadh","1763480462257997","Abbasi Raheel","Abbasi Raheel",2605826102,"Keeta","Driver","Riyadh","SPO",2000,208,"",208,-142,"invalid",1040,"",200,1240,344,"",0,0,100,-70,0,50,676,"SA578000086560801375 5171","",""]
+Row 27: ["Riyadh","1769819696237398","HASAN SRI LANKA/ABDULLAH","HASAN SRI LANKA/ABDULLAH",2621473517,"Keeta","Driver","Riyadh","SPO",2000,261,"",261,-261,"valid",1491.428571,"",200,1691.428571,0,150,0,0,100,-230,-133.74,"",1077.688571,"Hand Cash to Abdullah (878 SAR)","",""]
+Row 28: ["Riyadh","1764605716202362","Hossan Golam","Hossan Golam",2607518384,"Keeta","Driver","Riyadh","SPO",2000,198,"",198,-152,"invalid",990,"",200,1190,0,226,0,333.3333333333333,100,-50,0,"",480.6666667,"Hand cash","",""]
+Row 29: ["Riyadh","1763488561206006","Hasan Md Mahadi Hasan","Hasan Md Mahadi Hasan",2607518160,"Keeta","Driver","Riyadh","SPO",2000,321,"",321,-29,"valid",1834.285714,"",200,2034.285714,0,"",0,333.3333333333333,"",-20,-114.31,"",1566.642381,"Hand cash","",""]
+Row 30: ["Riyadh","1765796379060502","Hossen Md Milon","Hossen Md Milon",2569416775,"Keeta","Driver","Riyadh","SPO",2000,356,"",356,6,"valid",2030,790,200,3020,0,600,0,0,200,-30,-69,"",2121,"Hand cash","",""]
+Row 31: ["Riyadh","1765795341480367","Ahmad Amjad","Ahmad Amjad",2470815578,"Keeta","Driver","Riyadh","SPO",2000,367,"",367,17,"valid",2085,"",200,2285,0,"",0,0,100,0,0,"",2185,"Hand cash","",""]
+Row 77: ["Riyadh","","","","","","","","","","","",0,-300,"#N/A",0,"","",0,"","","","","","","","","","","",""]
+Row 78: ["Riyadh","","","","","","","","","","","",0,-300,"#N/A",0,"","",0,"","","","","","","","","","","",""]
+Row 79: ["Riyadh","","","","","","","","","","","",0,-300,"#N/A",0,"","",0,"","","","","","","","","","","",""]
+Row 80: ["Riyadh","","","","","","","","","","","",0,-300,"#N/A",0,"","",0,"","","","","","","","","","","",""]
+Row 81: ["Riyadh","","","","","","","","","","","",0,-300,"#N/A",0,"","",0,"","","","","","","","","","","",""]
+
+====================================================================================================
+=== Sheet: "Invalid Summary_KSA" ===
+====================================================================================================
+Range: A1:AF9255
+Rows: 9255, Cols: 32
+
+--- ALL ROWS (9255 total) ---
+Row 0: ["","Start date",46054,"","End Date",46081,"",28,"","",3104,0,"","","",16510,"","",21886,690,1239,500,1908.095235,2150,-1900,-826.95,2451,10220.95477,"","","",""]
+Row 1: ["Region","id","Id name","Real Rider Name","ID User Iqama","Business Unit","Designation","Location","VENDOR ","Basic Salary","Order Delivered ","Delivered by Reliver","Total Orders ","OT Orders","Status ","Salary","Incentive from nafouz","Net Bill","Total Salary","Iqama Renewal","Traffic violation","Vehicle Repairing Cost","Driving License Cost","Advance Amount","Deduction","food compensation","Internal Penalty","Total Payable ","revised payable","IBAN","Salary Status","Signature"]
+Row 2: ["Riyadh","1766343526237144","Mufees Muhammad","Mufees Muhammad",2619201243,"Keeta","Driver","Riyadh","SPO",2000,183,"",183,-167,"invalid",915,"",200,1115,0,225,0,307.14285714285717,400,-580,0,100,-497.1428571,500,"SA9380000866608018154296","",""]
+Row 3: ["Riyadh","1765225459202918","Talha Muhammad","Talha Muhammad",2605827068,"Keeta","Driver","Riyadh","SPO",2000,234,"",234,-116,"invalid",1170,"",200,1370,346,"",0,0,"",0,-177,"",847,847,"SA6280000865608010380742","",""]
+Row 4: ["Riyadh","1765212224088936","Chowdury Shibli","Chowdury Shibli",2584035014,"Keeta","Driver","Riyadh","SPO",2000,170,"",170,-180,"invalid",850,"",200,1050,0,"",0,0,300,-90,-114.25,500,45.75,400,"SA1680000865608015577375","",""]
+Row 5: ["Riyadh","1764862455480141","Islam Md Fakhrul","Islam Md Fakhrul",2607517998,"Keeta","Driver","Riyadh","SPO",2000,230,"",230,-120,"invalid",1150,638,200,1988,0,"",0,333.33333,100,-60,-104.15,"",1390.51667,1000,"SA4780000858608014218973","",""]
+Row 6: ["Riyadh","1765961421257092","Kunasekaram Pirasanthan","Kunasekaram Pirasanthan",2619201409,"Keeta","Driver","Riyadh","SPO",2000,190,"",190,-160,"invalid",950,"",200,1150,0,"",0,307.14285714285717,100,-310,-19.5,50,363.3571429,"","HOLD HIS SALARY","hold",""]
+Row 7: ["Riyadh","1764594439237630","Ali Qaiser","Ali Qaiser",2584277251,"Keeta","Driver","Riyadh","SPO",2000,227,"",227,-123,"invalid",1135,"",200,1335,0,"",500,0,100,0,-193.5,150,391.5,392,"Hand cash","",""]
+Row 8: ["Riyadh","1765457667237405","Abdulrm Riyasath","Abdulrm Riyasath",2618080648,"Keeta","Driver","Riyadh","SPO",2000,140,"",140,-210,"invalid",700,"",200,900,0,450,0,320,100,-370,-34.4,600,-974.4,"","SA2780000866608012715142","",""]
+Row 9: ["Riyadh","1764861630480419","Momen Abdul","Momen Abdul",2571373618,"Keeta","Driver","Riyadh","SPO",2000,355,"",355,5,"invalid",1775,"",200,1975,0,"",0,0,"",0,0,50,1925,1400,"Hand cash","",""]
+Row 10: ["Riyadh","1766262281257875","Rahman Md","Rahman Md",2593268036,"Keeta","Driver","Riyadh","SPO",2000,231,"",231,-119,"invalid",1155,838,200,2193,0,113,0,0,400,-70,-46.65,"",1563.35,1000,"SA5380000857608015612414","",""]
+Row 11: ["Riyadh","1764086694257633","Ali Imran","Ali Imran",2546805942,"Keeta","Driver","Riyadh","SPO",2000,48,"",48,-302,"invalid",240,"",200,440,0,"",0,0,150,-10,0,"",280,280,"Hand cash","",""]
+Row 12: ["Riyadh","1763474492060808","Rahman Md Sabbir Rahman","Rahman Md Sabbir Rahman",2595809787,"Keeta","Driver","Riyadh","SPO",2000,446,"",446,96,"invalid",2230,900,200,3330,0,"",0,0,100,-100,-137.5,"",2992.5,1900,"Hand cash","",""]
+Row 13: ["Riyadh","1768954041237552","Mia Md","Mia Md",2617979444,"Keeta","Driver","Riyadh","SPO",2000,207,"",207,-143,"invalid",1035,"",200,1235,0,225,0,307.14285714285717,100,-150,0,801,-348.1428571,500,"SA0980000866608017412885","",""]
+Row 14: ["Riyadh","1765171041060386","Khurshid Khan Muhammad Yousaf","Khurshid Khan Muhammad Yousaf",2588602652,"Keeta","Driver","Riyadh","SPO",2000,235,"",235,-115,"invalid",1175,"",200,1375,0,"",0,0,100,-40,0,150,1085,700,"SA7380000857608017286762","",""]
+Row 15: ["Riyadh","1763480462257997","Abbasi Raheel","Abbasi Raheel",2605826102,"Keeta","Driver","Riyadh","SPO",2000,208,"",208,-142,"invalid",1040,"",200,1240,344,"",0,0,100,-70,0,50,676,676,"SA578000086560801375 5171","",""]
+Row 16: ["Riyadh","1764605716202362","Hossan Golam","Hossan Golam",2607518384,"Keeta","Driver","Riyadh","SPO",2000,198,"",198,-152,"invalid",990,"",200,1190,0,226,0,333.3333333333333,100,-50,0,"",480.6666667,481,"Hand cash","",""]
+Row 62: ["Riyadh","","","","","","","","","","","",0,-300,"#N/A",0,"","",0,"","","","","","","","","","","","",""]
+Row 63: ["Riyadh","","","","","","","","","","","",0,-300,"#N/A",0,"","",0,"","","","","","","","","","","","",""]
+Row 64: ["Riyadh","","","","","","","","","","","",0,-300,"#N/A",0,"","",0,"","","","","","","","","","","","",""]
+Row 65: ["Riyadh","","","","","","","","","","","",0,-300,"#N/A",0,"","",0,"","","","","","","","","","","","",""]
+Row 66: ["Riyadh","","","","","","","","","","","",0,-300,"#N/A",0,"","",0,"","","","","","","","","","","","",""]
+
+====================================================================================================
+=== Sheet: "Help" ===
+====================================================================================================
+Range: A1:L990
+Rows: 990, Cols: 12
+
+--- ALL ROWS (990 total) ---
+Row 0: ["","","","",""," Iqama No","Project / Client","City","Violation Type","Description","Penalty Rate (SAR)","Total Penalty (SAR)"]
+Row 1: [2614087993,"HOSSAIN SAKHAWAT","HOSSAIN SAKHAWAT","","",2584277251,"keeta","Riyadh","Late Reporting","not go on time duty\n",50,50]
+Row 2: [2571373618,"MOMEN ABDUL","MOMEN ABDUL","","",2584035014,"keeta","Riyadh","Car Not Handed Over","not h/o car key on",100,100]
+Row 3: [2605826102,"ABBASI RAHEEL","ABBASI RAHEEL","","",2584277251,"keeta","Riyadh","Late Reporting","not go on time duty",50,50]
+Row 4: [2577580570,"NIL RASEL AHMED NIL","NIL RASEL AHMED NIL","","",2617987660,"keeta","Riyadh","Late Reporting","unauthorised leaves",50,50]
+Row 5: [2618080648,"Abdulrm Riyasath","Abdulrm Riyasath","","",2619201409,"keeta","Riyadh","Late Reporting","unauthorised leaves",50,50]
+Row 6: [2588602652,"Khurshid Khan Muhammad yousaf","Khurshid Khan Muhammad yousaf","","",2605826102,"keeta","Riyadh","Late Reporting","not go on time duty",50,50]
+Row 7: [2617987660,"THUVAN NESAIYARAJAN","THUVAN NESAIYARAJAN","","",2588602652,"keeta","Riyadh","Late Reporting","not go on time duty",50,50]
+Row 8: [2605817291,"RAIZ UMAR","RAIZ UMAR","","",2584277251,"keeta","Riyadh","Late Reporting","not go on time duty",50,50]
+Row 9: [2584035014,"Chowdury Shibli","Chowdury Shibli","","",2618080648,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 10: [2478284223,"ASGHAR ASIF","ASGHAR ASIF","","",2588602652,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 11: [2605827068,"Talha Muhammad","Talha Muhammad","","",2584035014,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 12: [2442457590,"SAFRAS MOHAMMED","Sagoor","","",2587214855,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 13: [2617805128,"ISLAM MD SHARIFUL","ISLAM MD SHARIFUL","","",2478284223,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 14: [2607517998,"ISLAM MD FAKHRUL","ISLAM MD FAKHRUL","","",2607518236,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 15: [2607518160,"HASAN MD MAHADI HASAN","HASAN MD MAHADI HASAN","","",2584035014,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,""]
+Row 16: [2587214855,"AHMED SAJIB","AHMED SAJIB","","",2571373618,"keeta","Riyadh","Was offline during Duty Hours.","Was offline during Duty Hours.",50,50]
+Row 17: [2588556163,"HAMID MIA SABBIR","HAMID MIA SABBIR","","",2619201243,"keeta","Riyadh","Was offline during Duty Hours.","Was offline during Duty Hours.",100,100]
+Row 18: [2593268036,"Rahman Md","Rahman Md","","",2617979444,"keeta","Riyadh","Refused to Take Rental Car","Refused to Take Rental Car",100,100]
+Row 19: [2546805942,"ALI IMRAN","ALI IMRAN","","",2584035014,"keeta","Riyadh","Misconduct","Misconduct",200,200]
+Row 20: [2595809787,"RAHMAN MD SABBIR RAHMAN","RAHMAN MD SABBIR RAHMAN","","",2618080648,"keeta","Riyadh","USE FAKE Gps","USE FAKE Gps",500,500]
+Row 21: [2569416775,"HOSSEN MD MILON","HOSSEN MD MILON","","",2584035014,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 22: [2617805052,"KAZI MD","KAZI MD","","",2584035014,"keeta","Riyadh","Car Not Handed Over","Car Not Handed Over",400,400]
+Row 23: [2607518236,"HASAN MOHAMMAD HASAN","HASAN MOHAMMAD HASAN","","",2470815578,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 24: [2619201409,"KUNASEKARAM PIRASANTHAN","KUNASEKARAM PIRASANTHAN","","",2578734028,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 25: [2470815578,"AHMAD AMJAD","AHMAD AMJAD","","",2569416775,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 26: [2607518384,"HOSSAN GOLAM","HOSSAN GOLAM","","",2607517998,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 27: [2617805144,"Hasan Mehedi","Hasan Mehedi","","",2571373618,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 28: [2584277251,"ALI QAISER","ALI QAISER","","",2593268036,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 29: [2578734028,"SAIMON SAIFUL","SAIMON SAIFUL","","",2584035014,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 30: [2619201243,"MUFEES MUHAMMAD","MUFEES MUHAMMAD","","",2607518160,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 31: [2617979444,"MIA MD","MIA MD","","",2584035014,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+Row 32: [2619201540,"ADAMBAWA MOHAMED","ADAMBAWA MOHAMED","","",2624162224,"keeta","Riyadh","Without Checking the engine oil and water","Without Checking the engine oil and water",100,100]
+
+====================================================================================================
+=== Sheet: "Riyadh" ===
+====================================================================================================
+Range: A1:AJ1016
+Rows: 1016, Cols: 36
+
+Merged Cells (5):
+  A1:AA1
+  A2:AA2
+  A3:AA3
+  A4:AA4
+  A63:H63
+
+--- ALL ROWS (1016 total) ---
+Row 0: ["NAFOUZ EST. FOR CONTRACTING - C.R. 1010879538","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","Paid",0,"Balance",-2092]
+Row 1: ["SALARY SHEET FOR THE MONTH OF JAN 2026","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","Bank",-360.65,"Total Amount",-1802.65]
+Row 2: ["Keeta- RUH","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","Hold",650,"",""]
+Row 3: ["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","Unpaid",0,"",""]
+Row 4: ["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","Cash",-68.5,"",""]
+Row 5: ["SL.No","id","Id name","Real Rider Name","ID User Iqama","Business Unit","Designation","Location","VENDOR ","Basic Salary","Order Delivered ","Delivered by Reliver","Total Orders ","OT Orders","Status ","Salary","Incentive from nafouz","Net Bill","Total Salary","Iqama Renewal","Traffic violation","Vehicle Repairing Cost","Driving License Cost","Advance Amount","Deduction","food compensation","Internal Penalty","Total Payable ","IBAN","","","","","","",""]
+Row 6: [1,"1766343526237144","Mufees Muhammad","Mufees Muhammad",2619201243,"Keeta","Driver","Riyadh","SPO",2000,183,"",183,-167,"invalid",915,"",200,1115,0,225,0,307.1428571,400,-580,0,100,-497.1428571,"SA9380000866608018154296","","","","","","",""]
+Row 7: [2,"1765225459202918","Talha Muhammad","Talha Muhammad",2605827068,"Keeta","Driver","Riyadh","SPO",2000,234,"",234,-116,"invalid",1170,"",200,1370,346,"",0,0,"",0,-177,"",847,"SA6280000865608010380742","","","","","","",""]
+Row 8: [3,"1764454531206206","Ahmed Sajib","Ahmed Sajib",2587214855,"Keeta","Driver","Riyadh","SPO",2000,533,"",533,183,"valid",2915,"",200,3115,0,"",314,0,150,-70,-79,100,2402,"Hand cash","","","","","","",""]
+Row 9: [4,"1765222245257777","Hamid Mia Sabbir","Hamid Mia Sabbir",2588556163,"Keeta","Driver","Riyadh","SPO",2000,314,"",314,-36,"valid",1794.285714,"",200,1994.285714,0,150,0,0,100,0,-112.5,"",1631.785714,"Hand cash","","","","","","",""]
+Row 10: [5,"1765212224088936","Chowdury Shibli","Chowdury Shibli",2584035014,"Keeta","Driver","Riyadh","SPO",2000,170,"",170,-180,"invalid",850,"",200,1050,0,"",0,0,300,-90,-114.25,500,45.75,"SA1680000865608015577375","","","","","","",""]
+Row 11: [6,"1766430539202821","Asghar Asif","Asghar Asif",2478284223,"Keeta","Driver","Riyadh","SPO",2000,319,"",319,-31,"valid",1822.857143,276,200,2298.857143,0,"",0,0,100,-80,-294,100,1724.857143,"SA1680000865608015577375","Bank","","","","","",""]
+Row 12: [7,"1765017691060624","Thuvan Nesaiyarajan","Thuvan Nesaiyarajan",2617987660,"Keeta","Driver","Riyadh","SPO",2000,262,"",262,-88,"valid",1497.142857,"",200,1697.142857,0,"",0,320,100,-100,-31,50,1096.142857,"SA5680000866608012737609","Bank","","","","","",""]
+Row 13: [8,"1764862455480141","Islam Md Fakhrul","Islam Md Fakhrul",2607517998,"Keeta","Driver","Riyadh","SPO",2000,230,"",230,-120,"invalid",1150,638,200,1988,0,"",0,333.33333,100,-60,-104.15,"",1390.51667,"SA4780000858608014218973","","","","","","",""]
+Row 14: [9,"1765961421257092","Kunasekaram Pirasanthan","Kunasekaram Pirasanthan",2619201409,"Keeta","Driver","Riyadh","SPO",2000,190,"",190,-160,"invalid",950,"",200,1150,0,"",0,307.1428571,100,-310,-19.5,50,363.3571429,"HOLD HIS SALARY","Hold","","","","","",""]
+Row 15: [10,"1763487278480524","Hossain Sakhawat","Hossain Sakhawat",2614087993,"Keeta","Driver","Riyadh","SPO",2000,352,"",352,2,"valid",2510,300,200,3010,0,226,0,333.3333333,200,-50,0,"",2200.666667,"Hand Cash","","","","","","",""]
+Row 16: [11,"1763477875202836","Nil Rasel Ahmed Nil","Nil Rasel Ahmed Nil",2577580570,"Keeta","Driver","Riyadh","SPO",2000,466,"",466,116,"valid",2580,"",200,2780,0,"",300,0,100,-70,-35.65,"",2274.35,"SA3180000856608013880734","Bank","","","","","",""]
+Row 17: [12,"1763489127202585","Hasan Mohammad Hasan","Hasan Mohammad Hasan",2607518236,"Keeta","Driver","Riyadh","SPO",2000,272,"",272,-78,"valid",1554.285714,"",200,1754.285714,0,75,0,0,100,0,0,100,1479.285714,"Hand cash","","","","","","",""]
+Row 18: [13,"1764594439237630","Ali Qaiser","Ali Qaiser",2584277251,"Keeta","Driver","Riyadh","SPO",2000,227,"",227,-123,"invalid",1135,"",200,1335,0,"",500,0,100,0,-193.5,150,391.5,"Hand cash","","","","","","",""]
+Row 19: [14,"1765457667237405","Abdulrm Riyasath","Abdulrm Riyasath",2618080648,"Keeta","Driver","Riyadh","SPO",2000,140,"",140,-210,"invalid",700,"",200,900,0,450,0,320,100,-370,-34.4,600,-974.4,"SA2780000866608012715142","Hold","","","","","",""]
+Row 20: [15,"1764861630480419","Momen Abdul","Momen Abdul",2571373618,"Keeta","Driver","Riyadh","SPO",2000,355,"",355,5,"invalid",1775,"",200,1975,0,"",0,0,"",0,0,50,1925,"Hand cash","","","","","","",""]
+Row 21: [16,"1766262281257875","Rahman Md","Rahman Md",2593268036,"Keeta","Driver","Riyadh","SPO",2000,231,"",231,-119,"invalid",1155,838,200,2193,0,113,0,0,400,-70,-46.65,"",1563.35,"SA5380000857608015612414","","","","","","",""]
+Row 22: [17,"1764086694257633","Ali Imran","Ali Imran",2546805942,"Keeta","Driver","Riyadh","SPO",2000,48,"",48,-302,"invalid",240,"",200,440,0,"",0,0,150,-10,0,"",280,"Hand cash","","","","","","",""]
+Row 23: [18,"1764088049060859","Kazi Md","Kazi Md",2617805052,"Keeta","Driver","Riyadh","SPO",2000,266,"",266,-84,"valid",1520,"",200,1720,0,600,0,307.1428571,100,-50,0,"",662.8571428,"Hand cash","","","","","","",""]
+Row 24: [19,"1764089300237420","Islam Md Shariful","Islam Md Shariful",2617805128,"Keeta","Driver","Riyadh","SPO",2000,449,"",449,99,"valid",2495,"",200,2695,0,113,0,330,150,-100,-38,"",1964,"Hand cash","","","","","","",""]
+Row 25: [20,"1763474492060808","Rahman Md Sabbir Rahman","Rahman Md Sabbir Rahman",2595809787,"Keeta","Driver","Riyadh","SPO",2000,446,"",446,96,"invalid",2230,900,200,3330,0,"",0,0,100,-100,-137.5,"",2992.5,"Hand cash","","","","","","",""]
+Row 26: [21,"1764091098206531","Hasan Mehedi","Hasan Mehedi",2617805144,"Keeta","Driver","Riyadh","SPO",2000,299,"",299,-51,"valid",1708.571428,225,200,2133.571428,0,"",0,307.1428571,"",-70,-68.5,"",1687.928571,"Hand cash","Cash","","","","","",""]
+Row 27: [22,"1768954041237552","Mia Md","Mia Md",2617979444,"Keeta","Driver","Riyadh","SPO",2000,207,"",207,-143,"invalid",1035,"",200,1235,0,225,0,307.1428571,100,-150,0,801,-348.1428571,"SA0980000866608017412885","","","","","","",""]
+Row 28: [23,"1765171041060386","Khurshid Khan Muhammad Yousaf","Khurshid Khan Muhammad Yousaf",2588602652,"Keeta","Driver","Riyadh","SPO",2000,235,"",235,-115,"invalid",1175,"",200,1375,0,"",0,0,100,-40,0,150,1085,"SA7380000857608017286762","","","","","","",""]
+Row 29: [24,"1764598028480232","Saimon Saiful","Saimon Saiful",2578734028,"Keeta","Driver","Riyadh","SPO",2000,250,"",250,-100,"valid",1428.571429,"",200,1628.571429,0,150,0,0,100,0,0,"",1378.571429,"SA3980000858608012823675","Bank","","","","","",""]
+Row 30: [25,"1763480462257997","Abbasi Raheel","Abbasi Raheel",2605826102,"Keeta","Driver","Riyadh","SPO",2000,208,"",208,-142,"invalid",1040,"",200,1240,344,"",0,0,100,-70,0,50,676,"SA578000086560801375 5171","","","","","","",""]
+Row 31: [26,"1769819696237398","HASAN SRI LANKA/ABDULLAH","HASAN SRI LANKA/ABDULLAH",2621473517,"Keeta","Driver","Riyadh","SPO",2000,261,"",261,-261,"valid",1491.428571,"",200,1691.428571,0,150,0,0,100,-230,-133.74,"",1077.688571,"Hand Cash to Abdullah (878 SAR)","","","","","","",""]
+Row 32: [27,"1764605716202362","Hossan Golam","Hossan Golam",2607518384,"Keeta","Driver","Riyadh","SPO",2000,198,"",198,-152,"invalid",990,"",200,1190,0,226,0,333.3333333,100,-50,0,"",480.6666667,"Hand cash","","","","","","",""]
+Row 33: [28,"1763488561206006","Hasan Md Mahadi Hasan","Hasan Md Mahadi Hasan",2607518160,"Keeta","Driver","Riyadh","SPO",2000,321,"",321,-29,"valid",1834.285714,"",200,2034.285714,0,"",0,333.3333333,"",-20,-114.31,"",1566.642381,"Hand cash","","","","","","",""]
+Row 34: [29,"1765796379060502","Hossen Md Milon","Hossen Md Milon",2569416775,"Keeta","Driver","Riyadh","SPO",2000,356,"",356,6,"valid",2030,790,200,3020,0,600,0,0,200,-30,-69,"",2121,"Hand cash","","","","","","",""]
+Row 35: [30,"1765795341480367","Ahmad Amjad","Ahmad Amjad",2470815578,"Keeta","Driver","Riyadh","SPO",2000,367,"",367,17,"valid",2085,"",200,2285,0,"",0,0,100,0,0,"",2185,"Hand cash","","","","","","",""]
+Row 36: [38,"","","","","","","","","","","",0,-300,"#N/A",0,"","",0,"","","","","","","","","","","","","","","","",""]
+Row 37: [39,"","","","","","","","","","","",0,-300,"#N/A",0,"","",0,"","","","","","","","","","","","","","","","",""]
+Row 38: [40,"","","","","","","","","","","",0,-300,"#N/A",0,"","",0,"","","","","","","","","","","","","","","","",""]
+Row 39: [41,"","","","","","","","","","","",0,-300,"#N/A",0,"","",0,"","","","","","","","","","","","","","","","",""]
+Row 40: [42,"","","","","","","","","","","",0,-300,"#N/A",0,"","",0,"","","","","","","","","","","","","","","","",""]
+Row 41: [43,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 42: [44,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 43: [45,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 44: [46,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 45: [47,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 46: [48,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 47: [49,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 48: [50,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 49: [51,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 50: [52,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 51: [53,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 52: [54,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 53: [55,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 54: [56,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 55: [57,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 56: [58,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 57: [59,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 58: [60,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 59: [61,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 60: [62,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 61: [60,"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+Row 62: ["GRAND TOTAL","","","","","","","","","","","","","","","",2952,4000,37910.57143,346,1952,1114,2558.095235,2850,-2110,"",2801,"","","","","","","","",""]
+Row 64: ["","","Prepared & Controlled By:","","","","","","","Checked & Approved By:","","","","","","","","","","","","","","Approved By:","","","","","","","","","","","",""]
+Row 66: ["","","Tasnia Jahan Toma","","","","","","","Monir Zaman","","","","","","","","","","","","","","Abu Fahad","","","","","","","","","","","",""]
+Row 67: ["","","Operations lead","","","","","","","COO","","","","","","","","","","","","","","General Manager","","","","","","","","","","","",""]
+
+====================================================================================================
+=== Sheet: "Pivot Table 9" ===
+====================================================================================================
+Range: undefined
+Rows: 1, Cols: 1
+
+--- ALL ROWS (0 total) ---
+
+====================================================================================================
+=== Sheet: "Invoice" ===
+====================================================================================================
+Range: B1:J1000
+Rows: 1000, Cols: 10
+
+--- ALL ROWS (1000 total) ---
+Row 1: ["Vendor Name:","Al Bahs","","","","Base Amt","Tax","Total Incl Tax",""]
+Row 2: ["","","","","Grand Total >>",251443.1,37716.465,289159.565,"#N/A"]
+Row 3: ["Permanent","","","","","","","",""]
+Row 4: ["Position","Staff Count","Monthly Price","Days/Hours","Day Rate/OT Rate","Sub Total","VAT Amt 15%","Total (Incl 15% VAT)",""]
+Row 5: ["CC","#VALUE!","#REF!","#N/A","#REF!","",0,0,""]
+Row 6: ["CC","#VALUE!","#REF!","#N/A","#REF!","",0,0,""]
+Row 7: ["","","","","Total",0,0,0,""]
+Row 13: ["Vendor Name:","Al Bahs","","","","","","",""]
+Row 14: ["","","","","","","","",true]
+Row 15: ["Temporary","","","","","","","",""]
+Row 16: ["Position","Staff Count","Monthly Price","Days/Hours","Day Rate/OT Rate","Sub Total","VAT Amt 15%","Total (Incl 15% VAT)",""]
+Row 17: ["TS","#VALUE!","#REF!","#N/A","#REF!","",0,0,""]
+Row 18: ["TS","#VALUE!","#REF!","#N/A","#REF!","",0,0,""]
+Row 19: ["","","","","Total",251443.1,37716.465,289159.565,""]
+
+====================================================================================================
+=== Sheet: "Guidelines" ===
+====================================================================================================
+Range: A1:F1000
+Rows: 1000, Cols: 6
+
+--- ALL ROWS (1000 total) ---
+Row 0: ["S No","Code","Type of Response","Response Name","Gender Eligibility","Description"]
+Row 1: [1,"P","Paid","Present","Male and Female","To employee completing his duty 8 Hrs with a hour break (8+1 hrs) in work place."]
+Row 2: [2,"WOW","Paid","Weekly Off Working","Male and Female","Weekly off working is stands to identify the employees where they attend the duty on their off, the code wow will be considered as 8 hrs of overtime except a hour of break, if working duration is less/higher than 8 hrs then it will be -/+ added at respective cell of overtime."]
+Row 3: [3,"WFH","Paid","Working From Home","Male and Female","An employee is working from their house, apartment, or place of residence, rather than working from the office if company allows by the nature of the job.\nTerms, criteria and guidelines will be according to the remote-working-policy of the company."]
+Row 4: [4,"BT","Paid","Business Trip","Male and Female","A business trip is normally travel undertaken by an employee on a temporary basis in order to carry out their duties at a specific place of work, no of days is upon the company."]
+Row 5: [5,"DL","Paid","Death Leave (Bereavement Leave)","Male and Female","In case of the death of a wife, children, or parents, a worker is entitled to a leave of 5 fully paid working days as per article 113 of Saudi labor law."]
+Row 6: [6,"CL","Paid","Compensate Leave","Male and Female","If the employee has worked on his holidays without OT and got approval from his line manager to get leave on another day, in very rare cases only if there are no other options to balance the workload except the Compensation."]
+Row 7: [7,"HL","Paid","Hajj Leave","Male and Female","Article 114 of Saudi labor law entitles a worker to avail 10 to 15 days of Hajj leave instead of 4 days vacation of Eid Al Adha provided that:\na) Hajj leaves can be taken only once during the period of service with an employer.\nb) The worker must have completed at least 2 years with the employer before availing Hajj leaves.\nc) The employer has the right to limit the number of people who can avail of this service every year"]
+Row 8: [8,"ADH","Paid","Iddah Leave (After death/divorce of Husband)","Female","According to article 160 of Saudi labor law, a working woman is entitled to the following Iddah leaves on the death of her husband:\na) 15 days Iddah leave for a non-Muslim woman.\nb) 130 days Iddah leave for a Muslim woman."]
+Row 9: [9,"IL","Paid","Injury Leave","Male and Female","If injuries happened to the employee on the work in any accidents and health issues/diseases due to the nature of work as a compensate"]
+Row 10: [10,"ML","Paid","Marriage Leave","Male and Female","According to article 113 of Saudi labor law, a worker can take 5 days fully paid vacations on the occasion of marriage."]
+Row 11: [11,"MTL","Paid","Maternity Leave","Female","The mother is entitled to 10 weeks of fully paid maternity leave as per article 151 of Saudi labor law, 4 weeks before the delivery and 6 weeks after the delivery."]
+Row 12: [12,"PTL","Paid","Paternity Leave","Male","In case of the birth of a child, the father is entitled to get 3 fully paid days leaves as per article 113 of Saudi labor law."]
+Row 13: [13,"PH","Paid","Public Holiday","Male and Female","Public Holidays by the Ministry of Kingdom, Eid holidays, National day etc"]
+Row 14: [14,"QL","Paid","Quarantine Leave","Male and Female","If the employee is on under covid-19 quarantine, valid medical report must be submitted. (75% paid)"]
+Row 15: [15,"SL","Paid","Sick Leave","Male and Female","For a longtime and severe sickness- As per the labor law article 117, An employee who is ill can take sick leave for a period of 4 months out of which:\na) The first month will be fully paid.\nb) The next two months will be paid 75% of the total salary.\nc) The fourth month will be unpaid.\nA valid Sick Leave report has to be submitted which will be sign/stamp by authorized doctor/hospital\n\nFor a short time sickness- As per regulations, one SL can be considered in a month when no SL paper and have a valid justification with LM approval, if this will repeat in every month then it'll not be considered without a proper document, for more than a day also a valid documents must be submitted to Ops admin."]
+Row 16: [16,"SE","Paid","Suspension Exceeds 5 days","Male and Female","As per the article 70 of Saudi labor law, suspension from work without pay may not exceed five days a month."]
+Row 17: [17,"WO","Paid","Weekly Off","Male and Female","Weekly once, min 4 days gap should be there between each WO, max 4-5 WO days only allowed in a month to fulfill the article 104 and 105"]
+Row 18: [18,"V","Unpaid","Annual Leave or Vacation","Male and Female","It should be approved from HODs through Jira Ticket for 3rd parties, this will be paid from the sponsor later a year as per the provision, Leave will be according to article 109 of Saudi labor law. Same time unpaid and later year paid for 3rd parties, it doesn't suit for noon's own staffs."]
+Row 19: [19,"PL","Unpaid","Parental Leave","Male and Female","Parental leave is for both parents after maternity/paternity, whether they are biological or adoptive. This time is dedicated to settling the new child into the family."]
+Row 20: [20,"EL","Unpaid","Exam Leave","Male and Female","Article 115 of Saudi labor law allows an employee to take the exam leaves for an unrepeated exam on the day of the exam. However, if the employee is repeating the exam, he is entitled to unpaid leave."]
+Row 21: [21,"UL","Unpaid","Unpaid Leave","Male and Female","Article 116 of Saudi labor law allows a worker to take unpaid leave for any period of time with the consent of his employer. However, the employment contract will be deemed if the unpaid leave is for more than 20 days unless agreed by both parties as per article 116 of Saudi labor law. mentioned all the unpaid leaves will comes under this."]
+Row 22: [22,"LD","Unpaid","Lockdown","Male and Female","If govt applied curfew for pandemic etc"]
+Row 23: [23,"A","Unpaid","Absent","Male and Female","If the employee not reported to the duty, Unplanned Absence, may penalties will be applied by the employer."]
+Row 24: [24,"NJY","Unpaid","Not Joined Yet","Male and Female","If the employee has not joined at those days"]
+Row 25: [25,"S","Unpaid","Suspension","Male and Female","If the employee is suspended for such violations etc."]
+Row 26: [26,"T","Unpaid","Terminated","Male and Female","If the employee has been terminated (Expelled or Terminated ones) & for final exit/resignation and suspension too."]
+Row 28: ["Note;-","PTL, MTL etc","Paid/Unpaid","Paid/Unpaid Leave","Male/Female","This kind of leave can be accepted if only the relative persons are living/available in the kingdom."]

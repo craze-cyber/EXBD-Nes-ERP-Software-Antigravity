@@ -1,0 +1,9 @@
+{
+  "name": "sovereign-erp-monorepo",
+  "private": true,
+  "workspaces": [
+    "Frontend",
+    "Backend",
+    "Database"
+  ]
+}
