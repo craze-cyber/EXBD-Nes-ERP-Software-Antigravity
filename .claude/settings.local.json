@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//d/AI Project/sovereign-erp/app/\\(dashboard\\)/clients/**)",
+      "Read(//d/AI Project/sovereign-erp/app/\\(dashboard\\)/settings/**)",
+      "Read(//d/AI Project/sovereign-erp/app/\\(dashboard\\)/payroll/**)",
+      "Read(//d/AI Project/sovereign-erp/**)",
+      "Bash(npx tsc *)"
+    ],
+    "additionalDirectories": [
+      "d:\\AI Project\\sovereign-erp\\app\\(dashboard)\\clients\\[id]",
+      "d:\\AI Project\\sovereign-erp\\app\\(dashboard)\\payroll"
+    ]
+  }
+}
