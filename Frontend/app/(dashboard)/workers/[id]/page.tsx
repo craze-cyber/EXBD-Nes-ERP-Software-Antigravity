@@ -1,9 +1,9 @@
-import WorkerDetail from "./WorkerDetail";
-
 export async function generateStaticParams() {
-  return [];
+  return [{ id: "1" }];
 }
 
+export const dynamicParams = false;
+
 export default function Page() {
-  return <WorkerDetail />;
+  return null;
 }

@@ -1,9 +1,9 @@
-import ClientDetail from "./ClientDetail";
-
 export async function generateStaticParams() {
-  return [];
+  return [{ id: "1" }];
 }
 
+export const dynamicParams = false;
+
 export default function Page() {
-  return <ClientDetail />;
+  return null;
 }

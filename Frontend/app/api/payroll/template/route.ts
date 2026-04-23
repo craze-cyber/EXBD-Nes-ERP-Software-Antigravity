@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import ExcelJS from 'exceljs';
 import { insforge } from '@/lib/insforge';
 
+export const dynamic = "force-static";
+
 /**
  * Template columns match the actual Dabdoob spreadsheet (ksa_payable tab):
  *
