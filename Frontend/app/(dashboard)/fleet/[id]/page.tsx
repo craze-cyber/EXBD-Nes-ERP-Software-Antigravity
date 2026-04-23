@@ -1,9 +1,5 @@
-export async function generateStaticParams() {
-  return [{ id: "1" }];
-}
-
-export const dynamicParams = false;
+import VehicleDetail from "./VehicleDetail";
 
 export default function Page() {
-  return null;
+  return <VehicleDetail />;
 }

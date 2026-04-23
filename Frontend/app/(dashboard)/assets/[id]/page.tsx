@@ -1,9 +1,7 @@
-export async function generateStaticParams() {
-  return [{ id: "1" }];
-}
+"use client";
 
-export const dynamicParams = false;
+import AssetDetail from "./AssetDetail";
 
 export default function Page() {
-  return null;
+  return <AssetDetail />;
 }

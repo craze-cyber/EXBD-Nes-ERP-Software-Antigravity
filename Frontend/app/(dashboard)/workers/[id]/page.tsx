@@ -1,9 +1,7 @@
-export async function generateStaticParams() {
-  return [{ id: "1" }];
-}
+"use client";
 
-export const dynamicParams = false;
+import WorkerDetail from "./WorkerDetail";
 
 export default function Page() {
-  return null;
+  return <WorkerDetail />;
 }
