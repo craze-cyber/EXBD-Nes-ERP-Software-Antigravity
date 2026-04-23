@@ -10,9 +10,10 @@
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "uuid": ">=14.0.0"
   },
+  "main": "server.js",
   "scripts": {
     "dev": "npm run dev --workspace=@sovereign/frontend",
     "build": "npm run build --workspace=@sovereign/frontend",
-    "start": "npm run start --workspace=@sovereign/frontend"
+    "start": "node server.js"
   }
 }
