@@ -75,8 +75,8 @@ if (!fs.existsSync(buildId)) {
 }
 
 // ── Step 3: Start ─────────────────────────────────────────────────────────────
-log('Starting: node next start -p ' + PORT);
-const child = spawn(NODE_BIN, [nextEntry, 'start', '-p', PORT], {
+log('Starting: node next start -p ' + PORT + ' -H 0.0.0.0');
+const child = spawn(NODE_BIN, [nextEntry, 'start', '-p', PORT, '-H', '0.0.0.0'], {
   cwd: FRONTEND,
   stdio: 'inherit',
   env: {
