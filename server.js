@@ -60,6 +60,8 @@ if (!fs.existsSync(buildId)) {
       env: {
         ...process.env,
         NODE_ENV: 'production',
+        NEXT_CPU_COUNT: '1',
+        NODE_OPTIONS: '--max-old-space-size=1024',
         PATH: path.dirname(NODE_BIN) + ':' + (process.env.PATH || ''),
       },
     });
@@ -81,6 +83,8 @@ const child = spawn(NODE_BIN, [nextEntry, 'start', '-p', PORT], {
     ...process.env,
     PORT: String(PORT),
     NODE_ENV: process.env.NODE_ENV || 'production',
+    NEXT_CPU_COUNT: '1',
+    NODE_OPTIONS: '--max-old-space-size=1024',
     PATH: path.dirname(NODE_BIN) + ':' + (process.env.PATH || ''),
   },
 });

@@ -18,6 +18,10 @@ const nextConfig: NextConfig = {
     };
     return config;
   },
+  experimental: {
+    workerThreads: false,
+    cpus: 1
+  }
 };
 
 export default nextConfig;
