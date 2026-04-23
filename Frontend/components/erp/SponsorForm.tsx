@@ -7,6 +7,7 @@ import * as z from "zod";
 import { insforge } from "@/lib/insforge";
 import { toast } from "sonner";
 import { Loader2, AlertCircle, Building2, MapPin, Hash, Landmark, CreditCard } from "lucide-react";
+import { useApprovalAction } from "@/hooks/useApprovalAction";
 
 const sponsorSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
@@ -30,6 +31,7 @@ interface SponsorFormProps {
 export default function SponsorForm({ initialData, onSuccess, onCancel }: SponsorFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [warning, setWarning] = useState<string | null>(null);
+  const { submitChange, saveLabel } = useApprovalAction();
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<SponsorFormValues>({
     resolver: zodResolver(sponsorSchema),
@@ -82,15 +84,23 @@ export default function SponsorForm({ initialData, onSuccess, onCancel }: Sponso
         return;
       }
 
-      // 3. Save
-      const { error } = initialData
-        ? await insforge.database.from("sponsors").update(values).eq("id", initialData.id)
-        : await insforge.database.from("sponsors").insert([values]);
+      // 3. Gate through approval engine
+      const result = await submitChange({
+        action: initialData ? "sponsor_edit" : "sponsor_create",
+        module: "Sponsors",
+        recordId: initialData?.id || null,
+        recordLabel: values.name,
+        beforeData: initialData || null,
+        afterData: values,
+      });
 
-      if (error) {
-        toast.error(error.message);
-      } else {
-        toast.success(`Sponsor ${initialData ? "updated" : "created"} successfully`);
+      if (result?.status === "executed") {
+        const { error } = initialData
+          ? await insforge.database.from("sponsors").update(values).eq("id", initialData.id)
+          : await insforge.database.from("sponsors").insert([values]);
+        if (error) { toast.error(error.message); return; }
+        onSuccess();
+      } else if (result?.status === "pending") {
         onSuccess();
       }
     } catch (err) {
@@ -221,7 +231,7 @@ export default function SponsorForm({ initialData, onSuccess, onCancel }: Sponso
           disabled={isLoading}
           className="flex-1 px-4 py-3 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold transition-all flex items-center justify-center gap-2"
         >
-          {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : (warning ? "Confirm & Save" : (initialData ? "Update Sponsor" : "Create Sponsor"))}
+          {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : (warning ? "Confirm & Save" : saveLabel)}
         </button>
       </div>
     </form>

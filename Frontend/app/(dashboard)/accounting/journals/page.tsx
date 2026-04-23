@@ -6,11 +6,13 @@ import { toast } from "sonner";
 import { ArrowLeft, Plus, X } from "lucide-react";
 import Link from "next/link";
 import JournalEntryCard from "@/components/erp/JournalEntry";
+import { useApprovalAction } from "@/hooks/useApprovalAction";
 
 export default function JournalsPage() {
   const [entries, setEntries] = useState<any[]>([]);
   const [accounts, setAccounts] = useState<any[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const { submitChange, saveLabel } = useApprovalAction();
 
   // Manual Entry Form State
   const [form, setForm] = useState({ entry_date: new Date().toISOString().split("T")[0], description: "", reference: "" });
@@ -89,37 +91,66 @@ export default function JournalsPage() {
       return;
     }
 
-    try {
-      const { data: je, error: jeErr } = await insforge.database.from("journal_entries").insert([{
-        entry_date: form.entry_date,
-        description: form.description,
-        reference: form.reference || null,
-        status: "posted",
-      }]).select().single();
-
-      if (jeErr) throw jeErr;
-
-      const linePayloads = validLines.map(l => ({
-        journal_entry_id: je.id,
+    const journalPayload = {
+      entry_date: form.entry_date,
+      description: form.description,
+      reference: form.reference || null,
+      status: "posted",
+      lines: validLines.map(l => ({
         account_id: l.account_id,
         debit: parseFloat(l.debit) || 0,
         credit: parseFloat(l.credit) || 0,
         description: l.description || null,
-      }));
+      })),
+    };
 
-      const { error: lErr } = await insforge.database.from("journal_lines").insert(linePayloads);
-      if (lErr) throw lErr;
+    const result = await submitChange({
+      action: "journal_create",
+      module: "Accounting",
+      recordLabel: form.description,
+      afterData: journalPayload,
+    });
 
-      toast.success("Journal entry posted successfully!");
+    if (result?.status === "executed") {
+      try {
+        const { data: je, error: jeErr } = await insforge.database.from("journal_entries").insert([{
+          entry_date: form.entry_date,
+          description: form.description,
+          reference: form.reference || null,
+          status: "posted",
+        }]).select().single();
+
+        if (jeErr) throw jeErr;
+
+        const linePayloads = validLines.map(l => ({
+          journal_entry_id: je.id,
+          account_id: l.account_id,
+          debit: parseFloat(l.debit) || 0,
+          credit: parseFloat(l.credit) || 0,
+          description: l.description || null,
+        }));
+
+        const { error: lErr } = await insforge.database.from("journal_lines").insert(linePayloads);
+        if (lErr) throw lErr;
+
+        toast.success("Journal entry posted successfully!");
+        setShowForm(false);
+        setForm({ entry_date: new Date().toISOString().split("T")[0], description: "", reference: "" });
+        setLines([
+          { account_id: "", debit: "", credit: "", description: "" },
+          { account_id: "", debit: "", credit: "", description: "" },
+        ]);
+        fetchEntries();
+      } catch (err: any) {
+        toast.error("Failed: " + err.message);
+      }
+    } else if (result?.status === "pending") {
       setShowForm(false);
       setForm({ entry_date: new Date().toISOString().split("T")[0], description: "", reference: "" });
       setLines([
         { account_id: "", debit: "", credit: "", description: "" },
         { account_id: "", debit: "", credit: "", description: "" },
       ]);
-      fetchEntries();
-    } catch (err: any) {
-      toast.error("Failed: " + err.message);
     }
   };
 

@@ -25,7 +25,8 @@
     "paths": {
       "@/*": ["./*"],
       "@/lib/insforge": ["../Database/src/index"],
-      "@/lib/*": ["../Backend/src/*"]
+      "@/lib/utils": ["./lib/utils"],
+      "@/lib/*": ["./lib/*", "../Backend/src/*"]
     }
   },
   "include": [

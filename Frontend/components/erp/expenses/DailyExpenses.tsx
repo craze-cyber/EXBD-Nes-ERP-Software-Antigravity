@@ -4,12 +4,14 @@ import React, { useState, useEffect } from "react";
 import { insforge } from "@/lib/insforge";
 import { toast } from "sonner";
 import { Plus, X, Search, FileText, Calendar, Filter } from "lucide-react";
+import { useApprovalAction } from "@/hooks/useApprovalAction";
 
 export default function DailyExpenses() {
   const [expenses, setExpenses] = useState<any[]>([]);
   const [clients, setClients] = useState<any[]>([]);
   const [workers, setWorkers] = useState<any[]>([]);
-  
+  const { submitChange, saveLabel } = useApprovalAction();
+
   const [showModal, setShowModal] = useState(false);
   const [dateFilter, setDateFilter] = useState("this_month");
   
@@ -93,7 +95,7 @@ export default function DailyExpenses() {
       }
     }
 
-    const { error } = await insforge.database.from("daily_expenses").insert([{
+    const expensePayload = {
       expense_date: form.expense_date,
       category: form.category,
       description: form.description,
@@ -104,18 +106,26 @@ export default function DailyExpenses() {
       worker_id: form.worker_id || null,
       notes: form.notes || null,
       receipt_url: receipt_url,
-      status: "pending"
-    }]);
+      status: "pending",
+    };
 
-    if (error) {
-      toast.error(error.message);
-      return;
+    const result = await submitChange({
+      action: "expense_create",
+      module: "Expenses",
+      recordLabel: `${form.category} - SAR ${form.amount}`,
+      afterData: expensePayload,
+    });
+
+    if (result?.status === "executed") {
+      const { error } = await insforge.database.from("daily_expenses").insert([expensePayload]);
+      if (error) { toast.error(error.message); return; }
+      setShowModal(false);
+      resetForm();
+      fetchExpenses();
+    } else if (result?.status === "pending") {
+      setShowModal(false);
+      resetForm();
     }
-
-    toast.success("Daily expense added successfully.");
-    setShowModal(false);
-    resetForm();
-    fetchExpenses();
   };
 
   const resetForm = () => {

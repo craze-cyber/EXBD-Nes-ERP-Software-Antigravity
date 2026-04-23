@@ -1,4 +1,4 @@
-import { insforge } from "./insforge";
+import { insforge } from "@sovereign/database";
 import { UserRole } from "@/types/erp.types";
 
 export const auth = insforge.auth;

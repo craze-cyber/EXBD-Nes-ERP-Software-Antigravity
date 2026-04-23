@@ -7,6 +7,7 @@ import * as z from "zod";
 import { insforge } from "@/lib/insforge";
 import { toast } from "sonner";
 import { Loader2, UserCircle, Briefcase, FileText, MapPin, UploadCloud, FileBadge } from "lucide-react";
+import { useApprovalAction } from "@/hooks/useApprovalAction";
 
 // The Zod schema only handles text, strings, and standard payloads. 
 // Files are handled separately in React State.
@@ -72,6 +73,7 @@ interface WorkerFormProps {
 export default function WorkerForm({ initialData, clients, onSuccess, onCancel }: WorkerFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState("");
+  const { submitChange, saveLabel } = useApprovalAction();
   const [activeTab, setActiveTab] = useState(0);
 
   // File state tracking
@@ -164,14 +166,24 @@ export default function WorkerForm({ initialData, clients, onSuccess, onCancel }
 
       setUploadProgress("Finalizing record...");
 
-      const { error } = initialData
-        ? await insforge.database.from("workers").update(payload).eq("id", initialData.id)
-        : await insforge.database.from("workers").insert([payload]);
+      const result = await submitChange({
+        action: initialData ? "worker_edit" : "worker_create",
+        module: "Workers",
+        recordId: initialData?.id || null,
+        recordLabel: payload.name_en || "Worker",
+        beforeData: initialData || null,
+        afterData: payload,
+      });
 
-      if (error) throw error;
-      
-      toast.success(`Worker successfully ${initialData ? "updated" : "added"} with documents!`);
-      onSuccess();
+      if (result?.status === "executed") {
+        const { error } = initialData
+          ? await insforge.database.from("workers").update(payload).eq("id", initialData.id)
+          : await insforge.database.from("workers").insert([payload]);
+        if (error) throw error;
+        onSuccess();
+      } else if (result?.status === "pending") {
+        onSuccess();
+      }
     } catch (err: any) {
       toast.error(err.message || "An unexpected error occurred");
     } finally {
@@ -486,7 +498,7 @@ export default function WorkerForm({ initialData, clients, onSuccess, onCancel }
           <button type="submit" disabled={isLoading} className="flex-1 px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-all flex items-center justify-center gap-2">
             {isLoading ? (
                <><Loader2 className="w-4 h-4 animate-spin" /> {uploadProgress || "Processing..."}</>
-            ) : (initialData ? "Save Changes" : "Save & Upload Documents")}
+            ) : saveLabel}
           </button>
         </div>
       </form>

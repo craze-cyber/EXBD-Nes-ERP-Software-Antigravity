@@ -6,12 +6,14 @@ import { toast } from "sonner";
 import AccountTree from "@/components/erp/AccountTree";
 import { Plus, X, BookOpen, BarChart3, FileText, Scale } from "lucide-react";
 import Link from "next/link";
+import { useApprovalAction } from "@/hooks/useApprovalAction";
 
 export default function AccountingDashboard() {
   const [accounts, setAccounts] = useState<any[]>([]);
   const [balances, setBalances] = useState<Record<string, number>>({});
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ code: "", name: "", type: "asset", parent_id: "", description: "" });
+  const { submitChange, saveLabel } = useApprovalAction();
 
   useEffect(() => {
     fetchAccounts();
@@ -48,15 +50,24 @@ export default function AccountingDashboard() {
       description: formData.description || null,
       parent_id: formData.parent_id || null,
     };
-    const { error } = await insforge.database.from("accounts").insert([payload]);
-    if (error) {
-      toast.error(error.message);
-      return;
+    const result = await submitChange({
+      action: "account_create",
+      module: "Accounting",
+      recordLabel: `${payload.code} - ${payload.name}`,
+      afterData: payload,
+    });
+
+    if (result?.status === "executed") {
+      const { error } = await insforge.database.from("accounts").insert([payload]);
+      if (error) { toast.error(error.message); return; }
+      toast.success("Account created successfully!");
+      setShowForm(false);
+      setFormData({ code: "", name: "", type: "asset", parent_id: "", description: "" });
+      fetchAccounts();
+    } else if (result?.status === "pending") {
+      setShowForm(false);
+      setFormData({ code: "", name: "", type: "asset", parent_id: "", description: "" });
     }
-    toast.success("Account created successfully!");
-    setShowForm(false);
-    setFormData({ code: "", name: "", type: "asset", parent_id: "", description: "" });
-    fetchAccounts();
   };
 
   const navCards = [

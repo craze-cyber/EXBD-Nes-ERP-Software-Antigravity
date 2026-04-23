@@ -174,7 +174,7 @@ export default function FirstCryPayrollPage() {
           <button 
             onClick={() => {
               const buffer = generateFCTemplate();
-              const blob = new Blob([buffer], { type: 'application/octet-stream' });
+              const blob = new Blob([new Uint8Array(buffer)], { type: 'application/octet-stream' });
               const url = window.URL.createObjectURL(blob);
               const a = document.createElement('a');
               a.href = url;

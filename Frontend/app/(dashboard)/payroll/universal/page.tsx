@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import ManageWorkerModal from "@/components/erp/payroll/ManageWorkerModal";
 import LogicCard from "@/components/erp/payroll/LogicCard";
 import * as XLSX from "xlsx";
-import { parseGiftsgateWorkbook, generateGiftsgateTemplate } from "@/lib/universal-parser";
+import { parseGiftsgateWorkbook, generateGiftsgateTemplate } from "@/lib/giftsgate-parser";
 
 export default function UniversalPayrollPage() {
   const [clients, setClients] = useState<any[]>([]);
@@ -177,7 +177,7 @@ export default function UniversalPayrollPage() {
           <button 
             onClick={() => {
               const buffer = generateGiftsgateTemplate();
-              const blob = new Blob([buffer], { type: 'application/octet-stream' });
+              const blob = new Blob([new Uint8Array(buffer)], { type: 'application/octet-stream' });
               const url = window.URL.createObjectURL(blob);
               const a = document.createElement('a');
               a.href = url;

@@ -82,8 +82,13 @@ export default function KeetaPayrollPage() {
   const syncLiabilities = async () => {
     if (!selectedClient || salaryRows.length === 0) return;
     try {
-      const updatedRows = await calculateLiabilityDeductions(salaryRows, selectedClient);
-      setSalaryRows(updatedRows);
+      const updated = await Promise.all(
+        salaryRows.map(async (row) => {
+          const result = await calculateLiabilityDeductions(row.courier_id, row.total_payable, payPeriod);
+          return { ...row, total_payable: Math.max(0, row.total_payable - result.total) };
+        })
+      );
+      setSalaryRows(updated);
       toast.success("✅ Liabilities synced from database");
     } catch (err) {
       toast.error("Liability sync failed");
@@ -210,7 +215,7 @@ export default function KeetaPayrollPage() {
                                         <td className="px-5 py-4 text-right font-mono">{r.total_orders}</td>
                                         <td className="px-5 py-4 text-right font-mono">{r.ot_orders}</td>
                                         <td className="px-5 py-4 text-right font-mono">{r.salary.toLocaleString()}</td>
-                                        <td className="px-5 py-4 text-right font-mono">{(r.order_income || 0).toLocaleString()}</td>
+                                        <td className="px-5 py-4 text-right font-mono">{(r.incentive_nafouz || 0).toLocaleString()}</td>
                                         <td className="px-5 py-4 text-right font-mono text-emerald-400 font-black">{r.total_payable.toLocaleString()}</td>
                                                           <td className="px-5 py-4 text-center">
                         <span className={`px-3 py-1 rounded-full text-[10px] font-bold border uppercase tracking-wider ${isSaved ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' : 'bg-zinc-800 text-zinc-300 border-white/5'}`}>
@@ -219,7 +224,7 @@ export default function KeetaPayrollPage() {
                       </td>
                       <td className="px-5 py-4 text-center">
                         <button 
-                          onClick={() => setManageWorker(w)}
+                          onClick={() => setManageWorker(r)}
                           disabled={!isSaved}
                           className="text-blue-500 hover:text-blue-400 font-bold text-xs bg-blue-500/10 px-4 py-2 rounded-lg hover:bg-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >

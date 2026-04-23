@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Menu } from "lucide-react";
 import Image from "next/image";
 import Sidebar from "./Sidebar";
+import { NotificationBell } from "./NotificationBell";
 
 export default function DashboardShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -63,8 +64,12 @@ export default function DashboardShell({ children }: { children: React.ReactNode
             />
           </div>
 
-          {/* Right spacer keeps logo centred */}
-          <div className="w-9" />
+          <NotificationBell />
+        </header>
+
+        {/* Desktop top bar */}
+        <header className="hidden lg:flex items-center justify-end gap-2 px-8 py-3 border-b border-white/5 bg-surface/60 backdrop-blur-md flex-shrink-0">
+          <NotificationBell />
         </header>
 
         {/* Page content */}

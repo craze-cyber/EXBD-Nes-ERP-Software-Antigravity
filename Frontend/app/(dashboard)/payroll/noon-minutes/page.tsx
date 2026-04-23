@@ -15,6 +15,8 @@ export default function NoonMinutesPayrollPage() {
   const [payPeriod, setPayPeriod] = useState(new Date().toISOString().slice(0, 7));
   const [salaryRows, setSalaryRows] = useState<NoonMinRow[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [manageWorker, setManageWorker] = useState<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -158,7 +160,7 @@ export default function NoonMinutesPayrollPage() {
                       </td>
                       <td className="px-5 py-4 text-center">
                         <button 
-                          onClick={() => setManageWorker(w)}
+                          onClick={() => setManageWorker(r)}
                           disabled={!isSaved}
                           className="text-blue-500 hover:text-blue-400 font-bold text-xs bg-blue-500/10 px-4 py-2 rounded-lg hover:bg-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
@@ -179,6 +181,9 @@ export default function NoonMinutesPayrollPage() {
                <p className="text-zinc-500 mt-2 max-w-sm">Import the salary template to process exact payables securely.</p>
            </div>
        )}
+      {manageWorker && (
+        <ManageWorkerModal worker={manageWorker} onClose={() => setManageWorker(null)} period={payPeriod} clientSlug="noon-minutes" />
+      )}
     </div>
   );
 }

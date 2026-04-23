@@ -7,6 +7,7 @@ import { exportToXLSX } from "@/lib/report-generator";
 import SettlementModal from "@/components/erp/settlement/SettlementModal";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useApprovalAction } from "@/hooks/useApprovalAction";
 
 export default function ExitSettlementPage() {
   const [exits, setExits] = useState<any[]>([]);
@@ -14,7 +15,8 @@ export default function ExitSettlementPage() {
   const [filterClient, setFilterClient] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  
+  const { submitChange } = useApprovalAction();
+
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -46,37 +48,53 @@ export default function ExitSettlementPage() {
     return e.worker_name?.toLowerCase().includes(sq) || e.emp_id?.toLowerCase().includes(sq) || e.iqama_no?.toLowerCase().includes(sq);
   });
 
-  const handleApprove = async (id: string, total: number) => {
-    // Approve creates journal entries
-    const { error } = await insforge.database
-      .from("worker_exits")
-      .update({ status: "approved", approved_at: new Date().toISOString() })
-      .eq("id", id);
-      
-    if (!error && total > 0) {
-      await insforge.database.from("journal_entries").insert([
-        { date: new Date().toISOString().split('T')[0], description: "EOSB Expense", account_code: "5300", debit: total, credit: 0 },
-        { date: new Date().toISOString().split('T')[0], description: "Accrued EOSB Liability", account_code: "2100", debit: 0, credit: total }
-      ]);
-      toast.success("Approved and Accounting entries triggered");
+  const handleApprove = async (id: string, total: number, workerName?: string) => {
+    const result = await submitChange({
+      action: "settlement_approve",
+      module: "Settlements",
+      recordId: id,
+      recordLabel: workerName || "Settlement",
+      afterData: { status: "approved", approved_at: new Date().toISOString() },
+    });
+
+    if (result?.status === "executed") {
+      const { error } = await insforge.database
+        .from("worker_exits")
+        .update({ status: "approved", approved_at: new Date().toISOString() })
+        .eq("id", id);
+      if (error) { toast.error(error.message); return; }
+      if (total > 0) {
+        await insforge.database.from("journal_entries").insert([
+          { entry_date: new Date().toISOString().split('T')[0], description: "EOSB Expense", account_code: "5300", debit: total, credit: 0, status: "posted" },
+          { entry_date: new Date().toISOString().split('T')[0], description: "Accrued EOSB Liability", account_code: "2100", debit: 0, credit: total, status: "posted" }
+        ]);
+      }
+      toast.success("Settlement approved and accounting entries posted");
       fetchExits();
-    } else if (error) {
-      toast.error(error.message);
     }
   };
 
   const handleMarkPaid = async (id: string, total: number) => {
-    const { error } = await insforge.database
-      .from("worker_exits")
-      .update({ status: "paid", paid_at: new Date().toISOString() })
-      .eq("id", id);
-      
-    if (!error && total > 0) {
-      await insforge.database.from("journal_entries").insert([
-        { date: new Date().toISOString().split('T')[0], description: "Clear Accrued EOSB", account_code: "2100", debit: total, credit: 0 },
-        { date: new Date().toISOString().split('T')[0], description: "Bank Transfer", account_code: "1000", debit: 0, credit: total }
-      ]);
-      toast.success("Marked Paid and Bank reconciled");
+    const result = await submitChange({
+      action: "settlement_pay",
+      module: "Settlements",
+      recordId: id,
+      afterData: { status: "paid", paid_at: new Date().toISOString() },
+    });
+
+    if (result?.status === "executed") {
+      const { error } = await insforge.database
+        .from("worker_exits")
+        .update({ status: "paid", paid_at: new Date().toISOString() })
+        .eq("id", id);
+      if (error) { toast.error(error.message); return; }
+      if (total > 0) {
+        await insforge.database.from("journal_entries").insert([
+          { entry_date: new Date().toISOString().split('T')[0], description: "Clear Accrued EOSB", account_code: "2100", debit: total, credit: 0, status: "posted" },
+          { entry_date: new Date().toISOString().split('T')[0], description: "Bank Transfer", account_code: "1000", debit: 0, credit: total, status: "posted" }
+        ]);
+      }
+      toast.success("Settlement marked paid and bank reconciled");
       fetchExits();
     }
   };

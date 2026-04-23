@@ -6,12 +6,14 @@ import { toast } from "sonner";
 import { Plus, X, Search, AlertTriangle, DollarSign, Calendar, FileText, ChevronRight, Download } from "lucide-react";
 import { exportToXLSX } from "@/lib/report-generator";
 import Link from "next/link";
+import { useApprovalAction } from "@/hooks/useApprovalAction";
 
 export default function LiabilitiesPage() {
   const [liabilities, setLiabilities] = useState<any[]>([]);
   const [types, setTypes] = useState<any[]>([]);
   const [clients, setClients] = useState<any[]>([]);
   const [workers, setWorkers] = useState<any[]>([]);
+  const { submitChange, saveLabel } = useApprovalAction();
 
   // Filters
   const [filterClient, setFilterClient] = useState("");
@@ -76,7 +78,7 @@ export default function LiabilitiesPage() {
 
     const typeName = types.find(t => t.id === form.liability_type_id)?.name || "Liability";
 
-    const { error } = await insforge.database.from("worker_liabilities").insert([{
+    const liabilityPayload = {
       worker_id: selectedWorker.id,
       client_id: selectedWorker.client_id,
       liability_type_id: form.liability_type_id,
@@ -90,14 +92,25 @@ export default function LiabilitiesPage() {
       reference_no: form.reference_no || null,
       notes: form.notes || null,
       status: "active",
-    }]);
+    };
 
-    if (error) { toast.error(error.message); return; }
+    const result = await submitChange({
+      action: "liability_create",
+      module: "Liabilities",
+      recordLabel: `${typeName} - ${selectedWorker.name_en}`,
+      afterData: liabilityPayload,
+    });
 
-    toast.success(`Liability "${typeName}" created for ${selectedWorker.name_en}`);
-    setShowModal(false);
-    resetForm();
-    fetchLiabilities();
+    if (result?.status === "executed") {
+      const { error } = await insforge.database.from("worker_liabilities").insert([liabilityPayload]);
+      if (error) { toast.error(error.message); return; }
+      setShowModal(false);
+      resetForm();
+      fetchLiabilities();
+    } else if (result?.status === "pending") {
+      setShowModal(false);
+      resetForm();
+    }
   };
 
   const resetForm = () => {

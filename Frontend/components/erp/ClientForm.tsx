@@ -7,6 +7,7 @@ import * as z from "zod";
 import { insforge } from "@/lib/insforge";
 import { toast } from "sonner";
 import { Loader2, Building2, Hash } from "lucide-react";
+import { useApprovalAction } from "@/hooks/useApprovalAction";
 
 const clientSchema = z.object({
   sponsor_id: z.string().uuid("Please select a valid sponsor"),
@@ -30,6 +31,7 @@ interface ClientFormProps {
 export default function ClientForm({ initialData, onSuccess, onCancel }: ClientFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [sponsors, setSponsors] = useState<any[]>([]);
+  const { submitChange, saveLabel } = useApprovalAction();
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<ClientFormValues>({
     resolver: zodResolver(clientSchema) as any,
@@ -82,14 +84,22 @@ export default function ClientForm({ initialData, onSuccess, onCancel }: ClientF
   const onSubmit = async (values: ClientFormValues) => {
     setIsLoading(true);
     try {
-      const { error } = initialData
-        ? await insforge.database.from("clients").update(values).eq("id", initialData.id)
-        : await insforge.database.from("clients").insert([values]);
+      const result = await submitChange({
+        action: initialData ? "client_edit" : "client_create",
+        module: "Clients",
+        recordId: initialData?.id || null,
+        recordLabel: values.legal_name,
+        beforeData: initialData || null,
+        afterData: values,
+      });
 
-      if (error) {
-        toast.error(error.message);
-      } else {
-        toast.success(`Client ${initialData ? "updated" : "created"} successfully`);
+      if (result?.status === "executed") {
+        const { error } = initialData
+          ? await insforge.database.from("clients").update(values).eq("id", initialData.id)
+          : await insforge.database.from("clients").insert([values]);
+        if (error) { toast.error(error.message); return; }
+        onSuccess();
+      } else if (result?.status === "pending") {
         onSuccess();
       }
     } catch (err) {
@@ -172,7 +182,7 @@ export default function ClientForm({ initialData, onSuccess, onCancel }: ClientF
       <div className="flex gap-4 pt-6">
         <button type="button" onClick={onCancel} className="flex-1 px-4 py-3 rounded-xl border border-white/10 hover:bg-white/5 transition-colors font-medium">Cancel</button>
         <button type="submit" disabled={isLoading} className="flex-1 px-4 py-3 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold transition-all flex items-center justify-center gap-2">
-          {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : (initialData ? "Update Client" : "Add Client")}
+          {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : saveLabel}
         </button>
       </div>
     </form>

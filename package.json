@@ -5,5 +5,10 @@
     "Frontend",
     "Backend",
     "Database"
-  ]
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@sovereign/frontend",
+    "build": "npm run build --workspace=@sovereign/frontend",
+    "start": "npm run start --workspace=@sovereign/frontend"
+  }
 }
