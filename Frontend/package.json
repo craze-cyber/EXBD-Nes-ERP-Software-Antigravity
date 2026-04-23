@@ -9,10 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@sovereign/backend": "*",
-    "@sovereign/database": "*",
     "@hookform/resolvers": "^5.2.2",
     "@insforge/sdk": "^1.2.5",
+    "@sovereign/backend": "*",
+    "@sovereign/database": "*",
     "@tanstack/react-table": "^8.21.3",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
@@ -28,7 +28,7 @@
     "recharts": "^3.8.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
-    "xlsx": "^0.18.5",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "zod": "^4.3.6"
   },
   "devDependencies": {

@@ -6,6 +6,12 @@
     "Backend",
     "Database"
   ],
+  "overrides": {
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
+    "exceljs": {
+      "uuid": "^14.0.0"
+    }
+  },
   "scripts": {
     "dev": "npm run dev --workspace=@sovereign/frontend",
     "build": "npm run build --workspace=@sovereign/frontend",
