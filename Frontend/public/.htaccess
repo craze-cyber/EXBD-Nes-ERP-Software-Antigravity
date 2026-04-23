@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Serve existing files and directories directly
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # For dynamic route segments (e.g. /assets/123), fall back to the
+  # parent route's pre-rendered HTML so the Next.js client router boots
+  # with the correct URL and fetches data via InsForge SDK.
+  RewriteRule ^([^/]+)/[^/]+(/.*)?$ /$1/index.html [L]
+
+  # Catch-all: serve root shell
+  RewriteRule ^ /index.html [L]
+</IfModule>
