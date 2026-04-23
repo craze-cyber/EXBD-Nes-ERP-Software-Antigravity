@@ -40,11 +40,19 @@ if (!nextEntry) {
 }
 log('next CLI: ' + nextEntry);
 
-// ── Step 2: Build if .next is missing ────────────────────────────────────────────
-// Use `node next/dist/bin/next build` — avoids sh -c and permission issues
+// ── Step 2: Build if BUILD_ID is missing ─────────────────────────────────────
+// .next/ directory is created at build START but BUILD_ID is written at SUCCESS.
+// Checking BUILD_ID prevents a mid-build process restart from skipping the build.
 const nextDir = path.join(FRONTEND, '.next');
-if (!fs.existsSync(nextDir)) {
-  log('.next not found — running: node next build');
+const buildId = path.join(FRONTEND, '.next', 'BUILD_ID');
+
+if (!fs.existsSync(buildId)) {
+  // Clean any partial .next left by a previously interrupted build
+  if (fs.existsSync(nextDir)) {
+    log('Removing incomplete .next from a previous interrupted build...');
+    fs.rmSync(nextDir, { recursive: true, force: true });
+  }
+  log('BUILD_ID missing — running: node next build');
   try {
     execFileSync(NODE_BIN, [nextEntry, 'build'], {
       cwd: FRONTEND,
@@ -52,20 +60,19 @@ if (!fs.existsSync(nextDir)) {
       env: {
         ...process.env,
         NODE_ENV: 'production',
-        // Ensure node binary dir is in PATH so any sub-processes work
         PATH: path.dirname(NODE_BIN) + ':' + (process.env.PATH || ''),
       },
     });
-    log('Build complete.');
+    log('Build complete. BUILD_ID: ' + fs.readFileSync(buildId, 'utf8').trim());
   } catch (err) {
     log('Build failed: ' + err.message);
     process.exit(1);
   }
 } else {
-  log('.next found — skipping build.');
+  log('Build OK (BUILD_ID: ' + fs.readFileSync(buildId, 'utf8').trim() + ') — skipping build.');
 }
 
-// ── Step 3: Start ───────────────────────────────────────────────────────────
+// ── Step 3: Start ─────────────────────────────────────────────────────────────
 log('Starting: node next start -p ' + PORT);
 const child = spawn(NODE_BIN, [nextEntry, 'start', '-p', PORT], {
   cwd: FRONTEND,
