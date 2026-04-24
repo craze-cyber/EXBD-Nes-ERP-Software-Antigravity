@@ -64,9 +64,15 @@ async function ensureBuild() {
         <script>setTimeout(() => location.reload(), 15000);</script>
       </div>
     `);
-  }).listen(PORT, '0.0.0.0');
+  });
 
-  log('Maintenance server listening on ' + PORT);
+  if (isNaN(PORT)) {
+    maintenanceServer.listen(PORT);
+    log('Maintenance server listening on socket: ' + PORT);
+  } else {
+    maintenanceServer.listen(PORT, '0.0.0.0');
+    log('Maintenance server listening on port: ' + PORT + ' (0.0.0.0)');
+  }
 
   if (fs.existsSync(nextDir)) {
     log('Cleaning partial .next directory...');
@@ -124,7 +130,15 @@ async function main() {
 
   const finalNextEntry = findNextEntry();
   log('Starting Next.js production server on ' + PORT);
-  const child = spawn(NODE_BIN, [finalNextEntry, 'start', '-p', PORT, '-H', '0.0.0.0'], {
+  
+  const startArgs = [finalNextEntry, 'start'];
+  if (isNaN(PORT)) {
+    startArgs.push('--port', PORT);
+  } else {
+    startArgs.push('--port', PORT, '--hostname', '0.0.0.0');
+  }
+
+  const child = spawn(NODE_BIN, startArgs, {
     cwd: FRONTEND,
     stdio: 'inherit',
     env: {
