@@ -141,17 +141,10 @@ async function ensureBuild() {
 async function main() {
   await ensureBuild();
 
-  const nextEntry = findNextEntry();
-  log('Starting Next.js production server on ' + PORT);
+  log('Starting Next.js production server via npm start...');
   
-  const startArgs = [nextEntry, 'start'];
-  if (isNaN(PORT)) {
-    startArgs.push('--port', PORT);
-  } else {
-    startArgs.push('--port', PORT, '--hostname', '0.0.0.0');
-  }
-
-  const child = spawn(NODE_BIN, startArgs, {
+  const NPM_BIN = path.join(path.dirname(NODE_BIN), 'npm');
+  const child = spawn(NPM_BIN, ['run', 'start'], {
     cwd: FRONTEND,
     stdio: 'inherit',
     env: {
