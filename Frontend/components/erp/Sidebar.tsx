@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -28,6 +29,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/lib/auth";
+import { insforge } from "@/lib/insforge";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 interface NavItem {
   name: string;
@@ -77,8 +80,10 @@ const navSections: NavSection[] = [
   {
     label: "Settings",
     items: [
-      { name: "User Management",  href: "/settings/users",    icon: UserCog },
-      { name: "System Settings",  href: "/settings/system",   icon: Sliders },
+      { name: "Approval Queue",    href: "/settings/approvals",  icon: Workflow },
+      { name: "Audit Log",         href: "/settings/audit",      icon: FileBarChart2 },
+      { name: "User Management",   href: "/settings/users",      icon: UserCog },
+      { name: "System Settings",   href: "/settings/system",     icon: Sliders },
     ],
   },
 ];
@@ -89,6 +94,28 @@ interface SidebarProps {
 
 export default function Sidebar({ onClose }: SidebarProps) {
   const pathname = usePathname();
+  const { user } = useCurrentUser();
+  const [pendingCount, setPendingCount] = useState(0);
+
+  useEffect(() => {
+    if (user?.role === "master_admin") {
+      insforge.database
+        .from("change_requests")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "pending")
+        .then(({ count }: any) => setPendingCount(count || 0));
+    }
+  }, [user?.role]);
+
+  // Inject badge into Approval Queue
+  const sectionsWithBadge = navSections.map(section => ({
+    ...section,
+    items: section.items.map(item =>
+      item.href === "/settings/approvals" && pendingCount > 0
+        ? { ...item, badge: pendingCount }
+        : item
+    ),
+  }));
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/");
@@ -126,7 +153,7 @@ export default function Sidebar({ onClose }: SidebarProps) {
 
       {/* Navigation */}
       <div className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
-        {navSections.map((section) => (
+        {sectionsWithBadge.map((section) => (
           <div key={section.label}>
             <p className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest px-3 mb-1.5">
               {section.label}

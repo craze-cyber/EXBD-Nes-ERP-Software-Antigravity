@@ -25,7 +25,8 @@ export function ApprovalModal({ change, onClose, onDone }: Props) {
     if (!user) return;
     setLoading(true);
     setError("");
-    const result = await approveChange(change.id, user, notes);
+    const adminUser = { id: user.id, name: user.full_name || user.email, role: user.role, email: user.email };
+    const result = await approveChange(change.id, adminUser, notes);
     setLoading(false);
     if (result.success) {
       onDone();
@@ -38,7 +39,8 @@ export function ApprovalModal({ change, onClose, onDone }: Props) {
     if (!user || !rejectReason.trim()) return;
     setLoading(true);
     setError("");
-    const result = await rejectChange(change.id, user, rejectReason);
+    const adminUser = { id: user.id, name: user.full_name || user.email, role: user.role, email: user.email };
+    const result = await rejectChange(change.id, adminUser, rejectReason);
     setLoading(false);
     if (result.success) {
       onDone();
