@@ -191,7 +191,7 @@ async function main() {
 
   const logStream = fs.createWriteStream(path.join(ROOT, 'production.log'), { flags: 'a' });
   
-  const child = spawn(NODE_BIN, [nextEntry, 'start', '-p', String(PORT)], {
+  const child = spawn(NODE_BIN, [nextEntry, 'start', '-H', '0.0.0.0', '-p', String(PORT)], {
     cwd: FRONTEND,
     env: {
       ...process.env,
