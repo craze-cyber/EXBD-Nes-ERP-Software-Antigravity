@@ -7,6 +7,7 @@ import { ArrowLeft, Plus, X } from "lucide-react";
 import Link from "next/link";
 import JournalEntryCard from "@/components/erp/JournalEntry";
 import { useApprovalAction } from "@/hooks/useApprovalAction";
+import AccountingSubNav from "@/components/erp/AccountingSubNav";
 
 export default function JournalsPage() {
   const [entries, setEntries] = useState<any[]>([]);
@@ -156,6 +157,7 @@ export default function JournalsPage() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
+      <AccountingSubNav />
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">

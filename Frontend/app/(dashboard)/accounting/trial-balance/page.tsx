@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { insforge } from "@/lib/insforge";
 import { ArrowLeft, CheckCircle2, AlertCircle, Download } from "lucide-react";
 import Link from "next/link";
+import AccountingSubNav from "@/components/erp/AccountingSubNav";
 
 export default function TrialBalance() {
   const [accounts, setAccounts] = useState<any[]>([]);
@@ -70,6 +71,7 @@ export default function TrialBalance() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
+      <AccountingSubNav />
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">

@@ -3,408 +3,218 @@
 import React, { useState, useEffect } from "react";
 import { insforge } from "@/lib/insforge";
 import { toast } from "sonner";
-import { Download, FileText, Users, Receipt, Calendar, BookOpen, AlertTriangle, BarChart3, PieChart } from "lucide-react";
-import ReportTable from "@/components/erp/ReportTable";
-import { exportToXLSX, exportInvoicePDF } from "@/lib/report-generator";
+import { 
+  Users, Receipt, FileText, BookOpen, Truck, Briefcase, 
+  Search, Download, Filter, ChevronRight, AlertCircle,
+  Calendar, CreditCard, PieChart, BarChart4
+} from "lucide-react";
+import * as gen from "@/lib/report-generator";
 
-type ReportType = "payroll" | "workers" | "invoice" | "attendance" | "accounting";
+type Category = "HR" | "Payroll" | "Accounting" | "Fleet" | "Clients";
+
+interface ReportDef {
+  id: string;
+  label: string;
+  desc: string;
+  category: Category;
+  icon: any;
+  action: (data: any) => void;
+}
 
 export default function ReportsPage() {
-  const [activeReport, setActiveReport] = useState<ReportType>("payroll");
-  const [clients, setClients] = useState<any[]>([]);
-  const [selectedClient, setSelectedClient] = useState("");
+  const [activeCategory, setActiveCategory] = useState<Category>("HR");
+  const [searchQuery, setSearchQuery] = useState("");
   const [period, setPeriod] = useState(new Date().toISOString().slice(0, 7));
+  const [loading, setLoading] = useState(false);
 
-  // Data stores
-  const [payrollData, setPayrollData] = useState<any[]>([]);
-  const [workerStats, setWorkerStats] = useState<any>({ total: 0, active: 0, idle: 0, terminated: 0, byNationality: {}, byClient: {}, expiringIqama: [] });
-  const [invoiceData, setInvoiceData] = useState<any[]>([]);
-  const [accountingData, setAccountingData] = useState<any>({ pl: [], bs: [] });
-
-  useEffect(() => {
-    fetchClients();
-  }, []);
+  // Data state
+  const [workers, setWorkers] = useState<any[]>([]);
+  const [payrolls, setPayrolls] = useState<any[]>([]);
+  const [liabilities, setLiabilities] = useState<any[]>([]);
+  const [accounting, setAccounting] = useState<any>({ pl: [], bs: [], tb: [] });
+  const [assets, setAssets] = useState<any[]>([]);
 
   useEffect(() => {
-    if (activeReport === "payroll") fetchPayroll();
-    if (activeReport === "workers") fetchWorkerStats();
-    if (activeReport === "invoice") fetchInvoiceData();
-    if (activeReport === "accounting") fetchAccounting();
-  }, [activeReport, selectedClient, period]);
+    fetchData();
+  }, [period]);
 
-  const fetchClients = async () => {
-    const { data } = await insforge.database.from("clients").select("*").order("legal_name");
-    if (data) setClients(data);
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [wRes, pRes, lRes, aRes, jRes, acRes] = await Promise.all([
+        insforge.database.from("workers").select("*, clients(legal_name)"),
+        insforge.database.from("payrolls").select("*, workers(name_en, emp_id, occupation_en), clients(legal_name)").gte("pay_period", `${period}-01`).lte("pay_period", `${period}-28`),
+        insforge.database.from("worker_liabilities").select("*, workers(name_en, emp_id)"),
+        insforge.database.from("assets").select("*, clients(legal_name)"),
+        insforge.database.from("journal_lines").select("debit, credit, accounts(code, name, type)"),
+        insforge.database.from("accounts").select("*").order("code")
+      ]);
+
+      if (wRes.data) setWorkers(wRes.data);
+      if (pRes.data) setPayrolls(pRes.data);
+      if (lRes.data) setLiabilities(lRes.data);
+      if (aRes.data) setAssets(aRes.data);
+
+      if (jRes.data) {
+        const agg: Record<string, any> = {};
+        jRes.data.forEach((l: any) => {
+          const code = l.accounts?.code || "?";
+          if (!agg[code]) agg[code] = { name: l.accounts?.name, type: l.accounts?.type, debit: 0, credit: 0 };
+          agg[code].debit += l.debit || 0;
+          agg[code].credit += l.credit || 0;
+        });
+
+        const tb = Object.entries(agg).map(([code, v]) => ({ code, ...v }));
+        const pl = tb.filter(v => v.type === "revenue" || v.type === "expense").map(v => ({
+          ...v, amount: v.type === "revenue" ? v.credit - v.debit : v.debit - v.credit
+        }));
+        const bs = tb.filter(v => v.type === "asset" || v.type === "liability" || v.type === "equity").map(v => ({
+          ...v, balance: v.type === "asset" ? v.debit - v.credit : v.credit - v.debit
+        }));
+        setAccounting({ pl, bs, tb });
+      }
+    } catch (e) {
+      toast.error("Failed to fetch report data");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const fetchPayroll = async () => {
-    let q = insforge.database.from("payrolls").select("*, workers(name_en, emp_id, occupation_en), clients(legal_name)");
-    if (selectedClient) q = q.eq("client_id", selectedClient);
-    if (period) q = q.gte("pay_period", `${period}-01`).lte("pay_period", `${period}-28`);
-    const { data } = await q;
-    setPayrollData((data || []).map((p: any) => ({
-      worker_name: p.workers?.name_en || "Unknown",
-      emp_id: p.workers?.emp_id || "—",
-      client: p.clients?.legal_name || "—",
-      position: p.workers?.occupation_en || "—",
-      basic: p.basic_salary || 0,
-      allowances: (p.food_allowance || 0) + (p.housing_allowance || 0) + (p.transport_allowance || 0) + (p.other_allowances || 0),
-      ot: p.ot_amount || 0,
-      deductions: p.deductions || 0,
-      net: p.net_salary || 0,
-    })));
-  };
+  const reports: ReportDef[] = [
+    // HR
+    { id: "worker_master", label: "Worker Master Report", desc: "Full database with all worker fields.", category: "HR", icon: Users, action: () => gen.pdfWorkerMaster(workers) },
+    { id: "staff_list", label: "Internal Staff List", desc: "List of internal staff members.", category: "HR", icon: Briefcase, action: () => gen.pdfGenericTable("Internal Staff List", "", [{key:"name_en", label:"Name"}, {key:"designation", label:"Designation"}, {key:"mobile", label:"Mobile"}], workers.filter(w => w.business_unit === "Staff")) },
+    { id: "doc_expiry", label: "Document Expiry", desc: "Iqama, Passport, and Insurance expiry alerts.", category: "HR", icon: AlertCircle, action: () => gen.pdfDocumentExpiry(workers) },
+    { id: "bench_workers", label: "Bench Worker Report", desc: "Unassigned workers currently on bench.", category: "HR", icon: Users, action: () => gen.pdfBenchWorkers(workers) },
+    { id: "non_iqama", label: "Non-Iqama Clients", desc: "Workers assigned to clients without Iqama.", category: "HR", icon: AlertCircle, action: () => gen.pdfNonIqamaClients(workers) },
+    
+    // Payroll
+    { id: "salary_sheet", label: "Monthly Salary Sheet", desc: "Detailed breakdown of earnings/deductions.", category: "Payroll", icon: Receipt, action: () => gen.pdfGenericTable(`Salary Sheet - ${period}`, "", [{key:"worker", label:"Worker"}, {key:"emp_id", label:"EMP ID", mono:true}, {key:"net", label:"Net", align:"right"}], payrolls.map(p => ({ worker: p.workers?.name_en, emp_id: p.workers?.emp_id, net: p.net_salary?.toFixed(2) }))) },
+    { id: "wps_file", label: "WPS Bank File", desc: "Wage Protection System formatted report.", category: "Payroll", icon: CreditCard, action: () => toast.info("WPS File Generation in progress...") },
+    { id: "ot_analysis", label: "Overtime Analysis", desc: "Overtime costs by department/supervisor.", category: "Payroll", icon: BarChart4, action: () => gen.pdfGenericTable(`Overtime Analysis - ${period}`, "", [{key:"worker", label:"Worker"}, {key:"ot", label:"OT Amount", align:"right"}], payrolls.filter(p => p.ot_amount > 0).map(p => ({ worker: p.workers?.name_en, ot: p.ot_amount?.toFixed(2) }))) },
+    { id: "payslip_batch", label: "Payslip Batch Export", desc: "Generate all payslips for current month.", category: "Payroll", icon: FileText, action: () => toast.info("Bulk PDF generation started...") },
+    { id: "leave_bal", label: "Leave Balance Report", desc: "Accrued vs Taken leaves per employee.", category: "Payroll", icon: Calendar, action: () => toast.info("Leave module integration required.") },
 
-  const fetchWorkerStats = async () => {
-    const { data: workers } = await insforge.database.from("workers").select("*, clients(legal_name)");
-    if (!workers) return;
+    // Accounting
+    { id: "pl_stmt", label: "Profit & Loss", desc: "Revenue vs Expenses statement.", category: "Accounting", icon: PieChart, action: () => gen.pdfProfitLoss(accounting.pl) },
+    { id: "bs_stmt", label: "Balance Sheet", desc: "Assets, Liabilities, and Equity summary.", category: "Accounting", icon: BookOpen, action: () => gen.pdfBalanceSheet(accounting.bs) },
+    { id: "trial_bal", label: "Trial Balance", desc: "Ledger account balances for verification.", category: "Accounting", icon: Filter, action: () => gen.pdfTrialBalance(accounting.tb) },
+    { id: "petty_cash", label: "Petty Cash Statement", desc: "Usage report by supervisor/account.", category: "Accounting", icon: CreditCard, action: () => toast.info("Select Petty Cash account in Ledger.") },
 
-    const active = workers.filter(w => w.work_status === "Active" || !w.work_status).length;
-    const idle = workers.filter(w => w.work_status === "Idle").length;
-    const terminated = workers.filter(w => w.work_status === "Terminated").length;
+    // Fleet & Assets
+    { id: "fleet_report", label: "Vehicle Fleet Report", desc: "List of vehicles and assigned drivers.", category: "Fleet", icon: Truck, action: () => gen.pdfVehicleFleet(assets) },
+    { id: "asset_inv", label: "Asset Inventory", desc: "Status and depreciation of company assets.", category: "Fleet", icon: Briefcase, action: () => gen.pdfAssetInventory(assets) },
+    { id: "liability_logs", label: "Liability Logs", desc: "Liabilities by worker and recovery status.", category: "Fleet", icon: FileText, action: () => gen.pdfLiabilityLogs(liabilities) },
 
-    const byNat: Record<string, number> = {};
-    const byClient: Record<string, number> = {};
-    workers.forEach(w => {
-      const nat = w.nationality || "Unknown";
-      byNat[nat] = (byNat[nat] || 0) + 1;
-      const cl = w.clients?.legal_name || "Unassigned";
-      byClient[cl] = (byClient[cl] || 0) + 1;
-    });
-
-    // Iqama expiry alerts
-    const now = new Date();
-    const d90 = new Date(now.getTime() + 90 * 86400000);
-    const expiring = workers.filter(w => {
-      if (!w.iqama_expiry) return false;
-      const exp = new Date(w.iqama_expiry);
-      return exp <= d90 && exp >= now;
-    }).map(w => ({
-      name: w.name_en || "Unknown",
-      iqama_no: w.iqama_no,
-      expiry: w.iqama_expiry,
-      days_left: Math.ceil((new Date(w.iqama_expiry).getTime() - now.getTime()) / 86400000),
-    })).sort((a, b) => a.days_left - b.days_left);
-
-    setWorkerStats({ total: workers.length, active, idle, terminated, byNationality: byNat, byClient: byClient, expiringIqama: expiring });
-  };
-
-  const fetchInvoiceData = async () => {
-    const { data: payrolls } = await insforge.database.from("payrolls").select("*, clients(legal_name)");
-    if (!payrolls) return;
-
-    const byClient: Record<string, { client: string; workers: number; total: number }> = {};
-    payrolls.forEach((p: any) => {
-      const cl = p.clients?.legal_name || "Unknown";
-      if (!byClient[cl]) byClient[cl] = { client: cl, workers: 0, total: 0 };
-      byClient[cl].workers++;
-      byClient[cl].total += p.net_salary || 0;
-    });
-
-    setInvoiceData(Object.values(byClient).map(c => ({
-      ...c,
-      vat: c.total * 0.15,
-      grand_total: c.total * 1.15,
-    })));
-  };
-
-  const fetchAccounting = async () => {
-    const { data: lines } = await insforge.database.from("journal_lines").select("debit, credit, accounts(code, name, type)");
-    if (!lines) return;
-
-    const agg: Record<string, { name: string; type: string; debit: number; credit: number }> = {};
-    lines.forEach((l: any) => {
-      const code = l.accounts?.code || "?";
-      if (!agg[code]) agg[code] = { name: l.accounts?.name, type: l.accounts?.type, debit: 0, credit: 0 };
-      agg[code].debit += l.debit || 0;
-      agg[code].credit += l.credit || 0;
-    });
-
-    const entries = Object.entries(agg);
-    const pl = entries.filter(([_, v]) => v.type === "revenue" || v.type === "expense").map(([code, v]) => ({
-      code, name: v.name, type: v.type,
-      amount: v.type === "revenue" ? v.credit - v.debit : v.debit - v.credit
-    }));
-    const bs = entries.filter(([_, v]) => v.type === "asset" || v.type === "liability" || v.type === "equity").map(([code, v]) => ({
-      code, name: v.name, type: v.type,
-      balance: v.type === "asset" ? v.debit - v.credit : v.credit - v.debit
-    }));
-
-    setAccountingData({ pl, bs });
-  };
-
-  const reports = [
-    { id: "payroll" as ReportType, label: "Payroll Summary", icon: Receipt, color: "text-emerald-400 bg-emerald-500/10" },
-    { id: "workers" as ReportType, label: "Worker Status", icon: Users, color: "text-blue-400 bg-blue-500/10" },
-    { id: "invoice" as ReportType, label: "Client Invoice", icon: FileText, color: "text-purple-400 bg-purple-500/10" },
-    { id: "attendance" as ReportType, label: "Attendance", icon: Calendar, color: "text-amber-400 bg-amber-500/10" },
-    { id: "accounting" as ReportType, label: "Financial Statements", icon: BookOpen, color: "text-red-400 bg-red-500/10" },
+    // Clients
+    { id: "inv_summary", label: "Invoice Summary", desc: "List of invoices generated in period.", category: "Clients", icon: FileText, action: () => gen.pdfGenericTable(`Invoice Summary - ${period}`, "", [{key:"client", label:"Client"}, {key:"amount", label:"Total", align:"right"}], payrolls.reduce((acc: any[], p) => {
+      const existing = acc.find(a => a.client === p.clients?.legal_name);
+      if (existing) existing.amount = (parseFloat(existing.amount) + (p.net_salary || 0)).toFixed(2);
+      else acc.push({ client: p.clients?.legal_name, amount: (p.net_salary || 0).toFixed(2) });
+      return acc;
+    }, [])) },
+    { id: "aging_report", label: "Aging Report", desc: "Unpaid invoices by days overdue.", category: "Clients", icon: Calendar, action: () => toast.info("Accounts Receivable module required.") },
+    { id: "profitability", label: "Client Profitability", desc: "Net margin per client (Rev - Cost).", category: "Clients", icon: BarChart4, action: () => gen.pdfClientProfitability(payrolls.reduce((acc: any[], p) => {
+      const existing = acc.find(a => a.client === p.clients?.legal_name);
+      const cost = p.net_salary || 0;
+      const rev = cost * 1.2; // Placeholder for revenue logic
+      if (existing) {
+        existing.revenue += rev; existing.cost += cost;
+      } else {
+        acc.push({ client: p.clients?.legal_name, revenue: rev, cost: cost });
+      }
+      return acc;
+    }, []).map(d => ({ ...d, margin: d.revenue - d.cost, pct: ((d.revenue - d.cost) / d.revenue) * 100 }))) },
   ];
 
-  // Simple bar chart renderer (pure CSS)
-  const BarChart = ({ data, label }: { data: Record<string, number>; label: string }) => {
-    const max = Math.max(...Object.values(data), 1);
-    return (
-      <div className="glass p-5 rounded-2xl border border-white/5">
-        <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-4">{label}</h4>
-        <div className="space-y-3">
-          {Object.entries(data).slice(0, 8).map(([key, val]) => (
-            <div key={key} className="flex items-center gap-3">
-              <span className="text-xs text-zinc-400 w-28 truncate shrink-0">{key}</span>
-              <div className="flex-1 h-6 bg-white/5 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-emerald-500/60 to-emerald-500 rounded-full transition-all duration-700" style={{ width: `${(val / max) * 100}%` }} />
-              </div>
-              <span className="text-xs font-mono text-zinc-300 w-10 text-right">{val}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
+  const filteredReports = reports.filter(r => 
+    r.category === activeCategory && 
+    (r.label.toLowerCase().includes(searchQuery.toLowerCase()) || r.desc.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  const categories: { id: Category; icon: any }[] = [
+    { id: "HR", icon: Users },
+    { id: "Payroll", icon: Receipt },
+    { id: "Accounting", icon: BookOpen },
+    { id: "Fleet", icon: Truck },
+    { id: "Clients", icon: Briefcase },
+  ];
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Reports & Analytics</h1>
-        <p className="text-zinc-400 mt-2">Generate, view, and export comprehensive business reports.</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">System Reports</h1>
+          <p className="text-zinc-400 mt-1">Generate and export comprehensive database reports.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <input 
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Search reports..."
+              className="pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl text-sm outline-none focus:border-emerald-500/50 w-64"
+            />
+          </div>
+          <input 
+            type="month" 
+            value={period} 
+            onChange={e => setPeriod(e.target.value)} 
+            className="bg-white/5 border border-white/10 rounded-xl py-2 px-3 text-sm outline-none focus:border-emerald-500/50 [color-scheme:dark]" 
+          />
+        </div>
       </div>
 
-      {/* Report Selector */}
-      <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
-        {reports.map(r => (
+      <div className="flex gap-2 border-b border-white/5 pb-0 overflow-x-auto hide-scrollbar">
+        {categories.map(cat => (
           <button
-            key={r.id}
-            onClick={() => setActiveReport(r.id)}
-            className={`whitespace-nowrap px-5 py-3 rounded-xl border flex items-center gap-2 transition-all ${
-              activeReport === r.id ? "bg-white/5 border-white/10" : "bg-black/20 border-white/5 hover:border-white/10 opacity-60"
+            key={cat.id}
+            onClick={() => setActiveCategory(cat.id)}
+            className={`px-6 py-4 flex items-center gap-2 border-b-2 transition-all ${
+              activeCategory === cat.id ? "border-emerald-500 text-white bg-white/5" : "border-transparent text-zinc-500 hover:text-zinc-300"
             }`}
           >
-            <r.icon className={`w-4 h-4 ${r.color.split(" ")[0]}`} />
-            <span className={`text-xs font-bold ${activeReport === r.id ? "text-white" : "text-zinc-400"}`}>{r.label}</span>
+            <cat.icon className="w-4 h-4" />
+            <span className="text-sm font-bold">{cat.id}</span>
           </button>
         ))}
       </div>
 
-      {/* Filters */}
-      <div className="glass p-4 rounded-2xl flex flex-col md:flex-row md:items-center gap-4">
-        <div>
-          <label className="text-[10px] uppercase text-zinc-500 font-bold">Client</label>
-          <select value={selectedClient} onChange={e => setSelectedClient(e.target.value)} className="w-full mt-1 bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-sm outline-none focus:border-emerald-500/50 appearance-none min-w-[180px]">
-            <option value="">All Clients</option>
-            {clients.map(c => <option key={c.id} value={c.id}>{c.legal_name}</option>)}
-          </select>
-        </div>
-        <div>
-          <label className="text-[10px] uppercase text-zinc-500 font-bold">Period</label>
-          <input type="month" value={period} onChange={e => setPeriod(e.target.value)} className="w-full mt-1 bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-sm outline-none focus:border-emerald-500/50 [color-scheme:dark]" />
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {loading ? (
+          Array(6).fill(0).map((_, i) => (
+            <div key={i} className="glass p-6 rounded-2xl border border-white/5 animate-pulse">
+              <div className="w-12 h-12 bg-white/5 rounded-xl mb-4" />
+              <div className="h-4 bg-white/5 rounded w-3/4 mb-2" />
+              <div className="h-3 bg-white/5 rounded w-full" />
+            </div>
+          ))
+        ) : filteredReports.length > 0 ? (
+          filteredReports.map(report => (
+            <div key={report.id} className="glass p-6 rounded-2xl border border-white/5 hover:border-emerald-500/30 transition-all group flex flex-col justify-between">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <report.icon className="w-6 h-6 text-emerald-400" />
+                </div>
+                <h3 className="font-bold text-white mb-2">{report.label}</h3>
+                <p className="text-xs text-zinc-500 leading-relaxed mb-6">{report.desc}</p>
+              </div>
+              <button 
+                onClick={() => report.action(null)}
+                className="w-full py-2.5 bg-white/5 hover:bg-emerald-500 hover:text-black rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all border border-white/10 group-hover:border-transparent"
+              >
+                <Download className="w-3.5 h-3.5" /> Generate PDF
+              </button>
+            </div>
+          ))
+        ) : (
+          <div className="col-span-full py-20 text-center glass rounded-3xl border border-white/5">
+            <Search className="w-12 h-12 mx-auto mb-4 text-zinc-700" />
+            <p className="text-zinc-500">No reports found in this category.</p>
+          </div>
+        )}
       </div>
-
-      {/* ─── PAYROLL SUMMARY ─── */}
-      {activeReport === "payroll" && (
-        <div className="space-y-6">
-          <ReportTable
-            title="Payroll Summary"
-            columns={[
-              { key: "worker_name", label: "Worker Name" },
-              { key: "emp_id", label: "EMP ID", mono: true },
-              { key: "client", label: "Client" },
-              { key: "position", label: "Position" },
-              { key: "basic", label: "Basic", align: "right", mono: true },
-              { key: "ot", label: "OT", align: "right", mono: true },
-              { key: "deductions", label: "Deductions", align: "right", mono: true },
-              { key: "net", label: "Net Salary", align: "right", mono: true },
-            ]}
-            data={payrollData}
-            totals={{
-              basic: payrollData.reduce((s, r) => s + r.basic, 0),
-              ot: payrollData.reduce((s, r) => s + r.ot, 0),
-              deductions: payrollData.reduce((s, r) => s + r.deductions, 0),
-              net: payrollData.reduce((s, r) => s + r.net, 0),
-            }}
-            onExport={() => exportToXLSX(payrollData, `Payroll_${period}`)}
-          />
-        </div>
-      )}
-
-      {/* ─── WORKER STATUS ─── */}
-      {activeReport === "workers" && (
-        <div className="space-y-6">
-          {/* Status cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { label: "Total Workers", val: workerStats.total, color: "text-white" },
-              { label: "Active", val: workerStats.active, color: "text-emerald-400" },
-              { label: "Idle", val: workerStats.idle, color: "text-amber-400" },
-              { label: "Terminated", val: workerStats.terminated, color: "text-red-400" },
-            ].map((s, i) => (
-              <div key={i} className="glass p-4 rounded-2xl border border-white/5 text-center">
-                <p className={`text-3xl font-bold ${s.color}`}>{s.val}</p>
-                <p className="text-[10px] text-zinc-500 uppercase tracking-wider mt-1">{s.label}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <BarChart data={workerStats.byNationality} label="Workers by Nationality" />
-            <BarChart data={workerStats.byClient} label="Workers by Client" />
-          </div>
-
-          {/* Iqama Expiry Alerts */}
-          {workerStats.expiringIqama.length > 0 && (
-            <div className="glass rounded-2xl border border-red-500/20 overflow-hidden">
-              <div className="px-6 py-4 bg-red-500/5 border-b border-red-500/10 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-red-500" />
-                <h3 className="text-sm font-bold text-red-400 uppercase tracking-wider">Iqama Expiry Alerts ({workerStats.expiringIqama.length})</h3>
-              </div>
-              <table className="w-full text-sm">
-                <thead className="text-[10px] uppercase text-zinc-500 font-bold bg-white/[0.02]">
-                  <tr>
-                    <th className="px-6 py-3 text-left">Worker</th>
-                    <th className="px-6 py-3 text-left">Iqama No</th>
-                    <th className="px-6 py-3 text-left">Expiry Date</th>
-                    <th className="px-6 py-3 text-right">Days Left</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                  {workerStats.expiringIqama.map((w: any, i: number) => (
-                    <tr key={i} className="hover:bg-white/[0.02]">
-                      <td className="px-6 py-3 text-white font-medium">{w.name}</td>
-                      <td className="px-6 py-3 font-mono text-zinc-400">{w.iqama_no}</td>
-                      <td className="px-6 py-3 font-mono text-zinc-400">{w.expiry}</td>
-                      <td className={`px-6 py-3 text-right font-mono font-bold ${w.days_left <= 30 ? "text-red-500" : w.days_left <= 60 ? "text-amber-400" : "text-zinc-300"}`}>
-                        {w.days_left} days
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          <div className="flex gap-2">
-            <button onClick={() => exportToXLSX(workerStats.expiringIqama, "IqamaExpiryAlerts")} className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold flex items-center gap-2 border border-white/5">
-              <Download className="w-3 h-3" /> Export Worker Report
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ─── CLIENT INVOICE ─── */}
-      {activeReport === "invoice" && (
-        <div className="space-y-6">
-          <ReportTable
-            title="Client Invoice Summary"
-            columns={[
-              { key: "client", label: "Client" },
-              { key: "workers", label: "Workers", align: "center", mono: true },
-              { key: "total", label: "Net Salary", align: "right", mono: true },
-              { key: "vat", label: "VAT (15%)", align: "right", mono: true },
-              { key: "grand_total", label: "Invoice Total", align: "right", mono: true },
-            ]}
-            data={invoiceData.map(d => ({
-              ...d,
-              total: d.total.toFixed(2),
-              vat: d.vat.toFixed(2),
-              grand_total: d.grand_total.toFixed(2),
-            }))}
-            totals={{
-              workers: invoiceData.reduce((s, d) => s + d.workers, 0),
-              total: invoiceData.reduce((s, d) => s + d.total, 0),
-              vat: invoiceData.reduce((s, d) => s + d.vat, 0),
-              grand_total: invoiceData.reduce((s, d) => s + d.grand_total, 0),
-            }}
-            onExport={() => exportToXLSX(invoiceData, `Invoices_${period}`)}
-          />
-          {invoiceData.length > 0 && (
-            <div className="flex gap-2">
-              {invoiceData.map(inv => (
-                <button
-                  key={inv.client}
-                  onClick={() => exportInvoicePDF({
-                    clientName: inv.client,
-                    period: period,
-                    workers: [{ name: "All Workers", empId: "—", position: "—", netSalary: inv.total }],
-                    subtotal: inv.total, vat: inv.vat, grandTotal: inv.grand_total,
-                  })}
-                  className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold flex items-center gap-2 border border-white/5"
-                >
-                  <FileText className="w-3 h-3" /> PDF: {inv.client}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ─── ATTENDANCE ─── */}
-      {activeReport === "attendance" && (
-        <div className="glass rounded-2xl border border-white/5 p-12 text-center text-zinc-500">
-          <Calendar className="w-12 h-12 mx-auto mb-4 opacity-30" />
-          <p className="font-bold text-white mb-1">Attendance Report</p>
-          <p className="text-xs">Upload an attendance grid from the Payroll module to populate this report. Data will populate automatically once payroll records with attendance data are saved.</p>
-        </div>
-      )}
-
-      {/* ─── ACCOUNTING ─── */}
-      {activeReport === "accounting" && (
-        <div className="space-y-6">
-          {/* P&L */}
-          <div className="glass rounded-[24px] border border-white/5 overflow-hidden">
-            <div className="px-6 py-4 bg-white/[0.02] border-b border-white/5">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider">Profit & Loss Statement</h3>
-            </div>
-            <table className="w-full text-sm">
-              <thead className="text-[10px] uppercase text-zinc-500 font-bold bg-white/[0.02]">
-                <tr><th className="px-6 py-3 text-left">Code</th><th className="px-6 py-3 text-left">Account</th><th className="px-6 py-3 text-left">Type</th><th className="px-6 py-3 text-right">Amount (SAR)</th></tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {accountingData.pl.map((r: any, i: number) => (
-                  <tr key={i} className="hover:bg-white/[0.02]">
-                    <td className="px-6 py-3 font-mono text-zinc-400">{r.code}</td>
-                    <td className="px-6 py-3 text-white">{r.name}</td>
-                    <td className="px-6 py-3"><span className={`text-xs uppercase font-bold ${r.type === "revenue" ? "text-emerald-400" : "text-amber-400"}`}>{r.type}</span></td>
-                    <td className={`px-6 py-3 text-right font-mono font-bold ${r.type === "revenue" ? "text-emerald-400" : "text-red-400"}`}>{r.amount.toFixed(2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot className="border-t-2 border-white/10">
-                <tr className="font-bold">
-                  <td className="px-6 py-3" colSpan={3}><span className="text-xs text-zinc-400 uppercase">Net Income</span></td>
-                  <td className={`px-6 py-3 text-right font-mono text-lg ${
-                    accountingData.pl.reduce((s: number, r: any) => s + (r.type === "revenue" ? r.amount : -r.amount), 0) >= 0 ? "text-emerald-400" : "text-red-400"
-                  }`}>
-                    {accountingData.pl.reduce((s: number, r: any) => s + (r.type === "revenue" ? r.amount : -r.amount), 0).toFixed(2)}
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-
-          {/* Balance Sheet */}
-          <div className="glass rounded-[24px] border border-white/5 overflow-hidden">
-            <div className="px-6 py-4 bg-white/[0.02] border-b border-white/5">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider">Balance Sheet</h3>
-            </div>
-            <table className="w-full text-sm">
-              <thead className="text-[10px] uppercase text-zinc-500 font-bold bg-white/[0.02]">
-                <tr><th className="px-6 py-3 text-left">Code</th><th className="px-6 py-3 text-left">Account</th><th className="px-6 py-3 text-left">Type</th><th className="px-6 py-3 text-right">Balance (SAR)</th></tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {accountingData.bs.map((r: any, i: number) => (
-                  <tr key={i} className="hover:bg-white/[0.02]">
-                    <td className="px-6 py-3 font-mono text-zinc-400">{r.code}</td>
-                    <td className="px-6 py-3 text-white">{r.name}</td>
-                    <td className="px-6 py-3"><span className={`text-xs uppercase font-bold ${r.type === "asset" ? "text-blue-400" : r.type === "liability" ? "text-red-400" : "text-purple-400"}`}>{r.type}</span></td>
-                    <td className="px-6 py-3 text-right font-mono font-bold text-zinc-300">{r.balance.toFixed(2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

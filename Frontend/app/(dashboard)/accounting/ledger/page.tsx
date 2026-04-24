@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { insforge } from "@/lib/insforge";
 import { Calendar, Search, Download, ArrowLeft, ChevronRight, X, ExternalLink, Users } from "lucide-react";
 import Link from "next/link";
+import AccountingSubNav from "@/components/erp/AccountingSubNav";
 
 export default function GeneralLedger() {
   const [accounts, setAccounts] = useState<any[]>([]);
@@ -79,6 +80,7 @@ export default function GeneralLedger() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
+      <AccountingSubNav />
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link href="/accounting" className="p-2 bg-white/5 hover:bg-white/10 rounded-xl transition-all"><ArrowLeft className="w-4 h-4" /></Link>

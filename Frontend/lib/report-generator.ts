@@ -72,25 +72,6 @@ export function exportToXLSX(data: Record<string, any>[], fileName: string, shee
   XLSX.writeFile(wb, `${fileName}.xlsx`);
 }
 
-export function exportToCSV(data: Record<string, any>[], fileName: string) {
-  if (data.length === 0) return;
-  const headers = Object.keys(data[0]);
-  const csvRows = [
-    headers.join(","),
-    ...data.map(row => headers.map(h => {
-      const val = row[h] ?? "";
-      return typeof val === "string" && val.includes(",") ? `"${val}"` : val;
-    }).join(","))
-  ];
-  const blob = new Blob([csvRows.join("\n")], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `${fileName}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
 /**
  * PDF GENERATORS
  */
@@ -138,7 +119,7 @@ export function pdfLiabilityLogs(liabilities: any[]) {
     <table><thead><tr><th>Worker</th><th>EMP ID</th><th>Type</th><th class="r">Total</th><th class="r">Recovered</th><th class="r">Remaining</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>${renderFooter()}`);
 }
 
-export function pdfTrialBalance(entries: { code: string; name: string; type: string; debit: number; credit: number }[]) {
+export function pdfTrialBalance(entries: any[]) {
   let totalDr = 0, totalCr = 0;
   const rows = entries.map(e => { totalDr += e.debit; totalCr += e.credit; return `<tr><td class="mono">${e.code}</td><td>${e.name}</td><td>${e.type}</td><td class="r mono">${sar(e.debit)}</td><td class="r mono">${sar(e.credit)}</td></tr>`; }).join("");
   openPrintWindow(`${renderHeader("Trial Balance")}
@@ -146,19 +127,19 @@ export function pdfTrialBalance(entries: { code: string; name: string; type: str
     <tfoot><tr class="totals-row"><td colspan="3">Total</td><td class="r mono">${sar(totalDr)}</td><td class="r mono">${sar(totalCr)}</td></tr></tfoot></table>${renderFooter()}`);
 }
 
-export function pdfProfitLoss(pl: { code: string; name: string; type: string; amount: number }[]) {
+export function pdfProfitLoss(pl: any[]) {
   const rev = pl.filter(r => r.type === "revenue");
   const exp = pl.filter(r => r.type === "expense");
   const totalRev = rev.reduce((s, r) => s + r.amount, 0);
   const totalExp = exp.reduce((s, r) => s + r.amount, 0);
-  const makeRows = (items: typeof pl) => items.map(r => `<tr><td class="mono">${r.code}</td><td>${r.name}</td><td class="r mono">${sar(r.amount)}</td></tr>`).join("");
+  const makeRows = (items: any[]) => items.map(r => `<tr><td class="mono">${r.code}</td><td>${r.name}</td><td class="r mono">${sar(r.amount)}</td></tr>`).join("");
   openPrintWindow(`${renderHeader("Profit & Loss Statement")}
     <div class="section">Revenue</div><table><thead><tr><th>Code</th><th>Account</th><th class="r">Amount (SAR)</th></tr></thead><tbody>${makeRows(rev)}</tbody><tfoot><tr class="totals-row"><td colspan="2">Total Revenue</td><td class="r mono">${sar(totalRev)}</td></tr></tfoot></table>
     <div class="section">Expenses</div><table><thead><tr><th>Code</th><th>Account</th><th class="r">Amount (SAR)</th></tr></thead><tbody>${makeRows(exp)}</tbody><tfoot><tr class="totals-row"><td colspan="2">Total Expenses</td><td class="r mono">${sar(totalExp)}</td></tr></tfoot></table>
     <div class="kpi-row"><div class="kpi"><div class="val" style="color:${totalRev - totalExp >= 0 ? "#16a34a" : "#dc2626"}">${sar(totalRev - totalExp)}</div><div class="lbl">Net Income</div></div></div>${renderFooter()}`);
 }
 
-export function pdfBalanceSheet(bs: { code: string; name: string; type: string; balance: number }[]) {
+export function pdfBalanceSheet(bs: any[]) {
   const groups = ["asset", "liability", "equity"];
   const sections = groups.map(g => {
     const items = bs.filter(b => b.type === g);
@@ -169,35 +150,56 @@ export function pdfBalanceSheet(bs: { code: string; name: string; type: string; 
   openPrintWindow(`${renderHeader("Balance Sheet")}${sections}${renderFooter()}`);
 }
 
-export function pdfGenericTable(title: string, subtitle: string, columns: { key: string; label: string; align?: string; mono?: boolean }[], data: any[]) {
-  const ths = columns.map(c => `<th class="${c.align === "right" ? "r" : ""}">$${c.label}</th>`).join("");
-  const rows = data.map(r => `<tr>${columns.map(c => `<td class="${c.align === "right" ? "r" : ""} ${c.mono ? "mono" : ""}">$${r[c.key] ?? "—"}</td>`).join("")}</tr>`).join("");
+export function pdfGenericTable(title: string, subtitle: string, columns: any[], data: any[]) {
+  const ths = columns.map(c => `<th class="${c.align === "right" ? "r" : ""}">${c.label}</th>`).join("");
+  const rows = data.map(r => `<tr>${columns.map(c => `<td class="${c.align === "right" ? "r" : ""} ${c.mono ? "mono" : ""}">${r[c.key] ?? "—"}</td>`).join("")}</tr>`).join("");
   openPrintWindow(`${renderHeader(title, subtitle)}<table><thead><tr>${ths}</tr></thead><tbody>${rows}</tbody></table>${renderFooter()}`);
 }
 
-export function exportInvoicePDF(invoice: {
-  clientName: string;
-  period: string;
-  workers: { name: string; empId: string; position: string; netSalary: number }[];
-  subtotal: number;
-  vat: number;
-  grandTotal: number;
-}) {
-  const rows = invoice.workers.map((w, i) => `
-    <tr>
-      <td>${i + 1}</td>
-      <td class="mono">${w.empId}</td>
-      <td>${w.name}</td>
-      <td>${w.position}</td>
-      <td class="r mono">${w.netSalary.toFixed(2)}</td>
-    </tr>
-  `).join("");
+export function pdfNonIqamaClients(workers: any[]) {
+  const nonIqama = workers.filter(w => w.client_id && !w.iqama_no);
+  pdfGenericTable("Non-Iqama Clients Report", `${nonIqama.length} workers assigned to clients without Iqama`, [
+    {key:"name_en", label:"Worker Name"},
+    {key:"emp_id", label:"EMP ID", mono:true},
+    {key:"clients.legal_name", label:"Client"},
+    {key:"nationality", label:"Nationality"}
+  ], nonIqama.map(w => ({ ...w, "clients.legal_name": w.clients?.legal_name })));
+}
 
-  openPrintWindow(`${renderHeader("INVOICE", `Client: ${invoice.clientName} | Period: ${invoice.period}`)}
-    <table><thead><tr><th>#</th><th>EMP ID</th><th>Name</th><th>Position</th><th class="r">Amount (SAR)</th></tr></thead><tbody>${rows}</tbody></table>
-    <div class="kpi-row">
-      <div class="kpi"><div class="val">${sar(invoice.subtotal)}</div><div class="lbl">Subtotal</div></div>
-      <div class="kpi"><div class="val">${sar(invoice.vat)}</div><div class="lbl">VAT (15%)</div></div>
-      <div class="kpi"><div class="val" style="color:${BRAND.color}">${sar(invoice.grandTotal)}</div><div class="lbl">Grand Total</div></div>
-    </div>${renderFooter()}`);
+export function pdfVehicleFleet(assets: any[]) {
+  pdfGenericTable("Vehicle Fleet Report", `${assets.length} vehicles`, [
+    {key:"asset_code", label:"Asset Code", mono:true},
+    {key:"name", label:"Vehicle Name"},
+    {key:"brand", label:"Brand"},
+    {key:"model", label:"Model"},
+    {key:"serial_number", label:"Plate Number"},
+    {key:"clients.legal_name", label:"Assigned Client"}
+  ], assets.map(a => ({ ...a, "clients.legal_name": a.clients?.legal_name })));
+}
+
+export function pdfAssetInventory(assets: any[]) {
+  pdfGenericTable("Asset Inventory", `${assets.length} total assets`, [
+    {key:"asset_code", label:"Code", mono:true},
+    {key:"name", label:"Name"},
+    {key:"category", label:"Category"},
+    {key:"purchase_price", label:"Purchase Price", align:"right"},
+    {key:"current_value", label:"Current Value", align:"right"},
+    {key:"status", label:"Status"}
+  ], assets);
+}
+
+export function pdfClientProfitability(data: any[]) {
+  pdfGenericTable("Client Profitability Report", "Profit margin analysis per client", [
+    {key:"client", label:"Client"},
+    {key:"revenue", label:"Revenue", align:"right"},
+    {key:"cost", label:"Direct Cost", align:"right"},
+    {key:"margin", label:"Net Margin", align:"right"},
+    {key:"pct", label:"Margin %", align:"right"}
+  ], data.map(d => ({
+    ...d,
+    revenue: sar(d.revenue),
+    cost: sar(d.cost),
+    margin: sar(d.margin),
+    pct: d.pct.toFixed(1) + "%"
+  })));
 }

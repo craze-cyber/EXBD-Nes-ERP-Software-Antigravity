@@ -1,8 +1,8 @@
-import * as XLSX from "xlsx";
-
 /**
- * BRANDING & UTILS
+ * PDF Report Generator — uses browser print-to-PDF via a styled HTML window.
+ * Each report type has a dedicated generator that builds a print-optimized HTML document.
  */
+
 const BRAND = {
   name: "EXBD Group",
   subtitle: "Sovereign ERP Engine",
@@ -62,38 +62,7 @@ function openPrintWindow(html: string) {
   }
 }
 
-/**
- * EXPORT FUNCTIONS (XLSX/CSV)
- */
-export function exportToXLSX(data: Record<string, any>[], fileName: string, sheetName = "Report") {
-  const ws = XLSX.utils.json_to_sheet(data);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, sheetName);
-  XLSX.writeFile(wb, `${fileName}.xlsx`);
-}
-
-export function exportToCSV(data: Record<string, any>[], fileName: string) {
-  if (data.length === 0) return;
-  const headers = Object.keys(data[0]);
-  const csvRows = [
-    headers.join(","),
-    ...data.map(row => headers.map(h => {
-      const val = row[h] ?? "";
-      return typeof val === "string" && val.includes(",") ? `"${val}"` : val;
-    }).join(","))
-  ];
-  const blob = new Blob([csvRows.join("\n")], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `${fileName}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-/**
- * PDF GENERATORS
- */
+// ─── Individual Report Generators ───
 
 export function pdfWorkerMaster(workers: any[]) {
   const rows = workers.map(w => `<tr>
@@ -130,6 +99,13 @@ export function pdfBenchWorkers(workers: any[]) {
   const rows = bench.map(w => `<tr><td class="mono">${w.emp_id || "—"}</td><td>${w.name_en || "—"}</td><td>${w.nationality || "—"}</td><td>${w.designation || w.occupation_en || "—"}</td><td class="r mono">${sar(w.basic_salary)}</td><td>${w.joining_date || "—"}</td></tr>`).join("");
   openPrintWindow(`${renderHeader("Bench Worker Report", `${bench.length} unassigned workers`)}
     <table><thead><tr><th>EMP ID</th><th>Name</th><th>Nationality</th><th>Designation</th><th class="r">Basic (SAR)</th><th>Joined</th></tr></thead><tbody>${rows}</tbody></table>${renderFooter()}`);
+}
+
+export function pdfNonIqamaClients(workers: any[]) {
+  const noIqama = workers.filter(w => !w.iqama_no && w.client_id);
+  const rows = noIqama.map(w => `<tr><td class="mono">${w.emp_id || "—"}</td><td>${w.name_en || "—"}</td><td>${w.clients?.legal_name || "—"}</td><td>${w.nationality || "—"}</td><td>${w.work_status || "Active"}</td></tr>`).join("");
+  openPrintWindow(`${renderHeader("Non-Iqama Client Workers", `${noIqama.length} workers without Iqama`)}
+    <table><thead><tr><th>EMP ID</th><th>Name</th><th>Client</th><th>Nationality</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>${renderFooter()}`);
 }
 
 export function pdfLiabilityLogs(liabilities: any[]) {
@@ -169,35 +145,26 @@ export function pdfBalanceSheet(bs: { code: string; name: string; type: string; 
   openPrintWindow(`${renderHeader("Balance Sheet")}${sections}${renderFooter()}`);
 }
 
-export function pdfGenericTable(title: string, subtitle: string, columns: { key: string; label: string; align?: string; mono?: boolean }[], data: any[]) {
-  const ths = columns.map(c => `<th class="${c.align === "right" ? "r" : ""}">$${c.label}</th>`).join("");
-  const rows = data.map(r => `<tr>${columns.map(c => `<td class="${c.align === "right" ? "r" : ""} ${c.mono ? "mono" : ""}">$${r[c.key] ?? "—"}</td>`).join("")}</tr>`).join("");
-  openPrintWindow(`${renderHeader(title, subtitle)}<table><thead><tr>${ths}</tr></thead><tbody>${rows}</tbody></table>${renderFooter()}`);
+export function pdfVehicleFleet(vehicles: any[]) {
+  const rows = vehicles.map(v => `<tr><td class="mono">${v.plate_number || "—"}</td><td>${v.make || ""} ${v.model || ""}</td><td>${v.year || "—"}</td><td>${v.assigned_driver || "—"}</td><td>${v.insurance_expiry || "—"}</td><td>${v.istimara_expiry || "—"}</td><td><span class="badge ${v.status === "active" ? "badge-green" : "badge-yellow"}">${v.status || "—"}</span></td></tr>`).join("");
+  openPrintWindow(`${renderHeader("Vehicle Fleet Report", `${vehicles.length} vehicles`)}
+    <table><thead><tr><th>Plate</th><th>Vehicle</th><th>Year</th><th>Driver</th><th>Insurance Exp</th><th>Istimara Exp</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>${renderFooter()}`);
 }
 
-export function exportInvoicePDF(invoice: {
-  clientName: string;
-  period: string;
-  workers: { name: string; empId: string; position: string; netSalary: number }[];
-  subtotal: number;
-  vat: number;
-  grandTotal: number;
-}) {
-  const rows = invoice.workers.map((w, i) => `
-    <tr>
-      <td>${i + 1}</td>
-      <td class="mono">${w.empId}</td>
-      <td>${w.name}</td>
-      <td>${w.position}</td>
-      <td class="r mono">${w.netSalary.toFixed(2)}</td>
-    </tr>
-  `).join("");
+export function pdfAssetInventory(assets: any[]) {
+  const rows = assets.map(a => `<tr><td class="mono">${a.asset_code || "—"}</td><td>${a.name || "—"}</td><td>${a.category || "—"}</td><td class="r mono">${sar(a.purchase_price)}</td><td class="r mono">${sar(a.current_value)}</td><td>${a.status || "—"}</td><td>${a.location || "—"}</td></tr>`).join("");
+  openPrintWindow(`${renderHeader("Asset Inventory Report", `${assets.length} assets`)}
+    <table><thead><tr><th>Code</th><th>Asset</th><th>Category</th><th class="r">Purchase</th><th class="r">Current</th><th>Status</th><th>Location</th></tr></thead><tbody>${rows}</tbody></table>${renderFooter()}`);
+}
 
-  openPrintWindow(`${renderHeader("INVOICE", `Client: ${invoice.clientName} | Period: ${invoice.period}`)}
-    <table><thead><tr><th>#</th><th>EMP ID</th><th>Name</th><th>Position</th><th class="r">Amount (SAR)</th></tr></thead><tbody>${rows}</tbody></table>
-    <div class="kpi-row">
-      <div class="kpi"><div class="val">${sar(invoice.subtotal)}</div><div class="lbl">Subtotal</div></div>
-      <div class="kpi"><div class="val">${sar(invoice.vat)}</div><div class="lbl">VAT (15%)</div></div>
-      <div class="kpi"><div class="val" style="color:${BRAND.color}">${sar(invoice.grandTotal)}</div><div class="lbl">Grand Total</div></div>
-    </div>${renderFooter()}`);
+export function pdfClientProfitability(data: { client: string; revenue: number; cost: number; margin: number; pct: number }[]) {
+  const rows = data.map(d => `<tr><td>${d.client}</td><td class="r mono">${sar(d.revenue)}</td><td class="r mono">${sar(d.cost)}</td><td class="r mono" style="color:${d.margin >= 0 ? "#16a34a" : "#dc2626"}">${sar(d.margin)}</td><td class="r mono">${d.pct.toFixed(1)}%</td></tr>`).join("");
+  openPrintWindow(`${renderHeader("Client Profitability Report")}
+    <table><thead><tr><th>Client</th><th class="r">Revenue</th><th class="r">Labor Cost</th><th class="r">Margin</th><th class="r">%</th></tr></thead><tbody>${rows}</tbody></table>${renderFooter()}`);
+}
+
+export function pdfGenericTable(title: string, subtitle: string, columns: { key: string; label: string; align?: string }[], data: any[]) {
+  const ths = columns.map(c => `<th class="${c.align === "right" ? "r" : ""}">${c.label}</th>`).join("");
+  const rows = data.map(r => `<tr>${columns.map(c => `<td class="${c.align === "right" ? "r mono" : ""}">${r[c.key] ?? "—"}</td>`).join("")}</tr>`).join("");
+  openPrintWindow(`${renderHeader(title, subtitle)}<table><thead><tr>${ths}</tr></thead><tbody>${rows}</tbody></table>${renderFooter()}`);
 }

@@ -7,6 +7,7 @@ import AccountTree from "@/components/erp/AccountTree";
 import { Plus, X, BookOpen, BarChart3, FileText, Scale } from "lucide-react";
 import Link from "next/link";
 import { useApprovalAction } from "@/hooks/useApprovalAction";
+import AccountingSubNav from "@/components/erp/AccountingSubNav";
 
 export default function AccountingDashboard() {
   const [accounts, setAccounts] = useState<any[]>([]);
@@ -78,6 +79,7 @@ export default function AccountingDashboard() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
+      <AccountingSubNav />
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
