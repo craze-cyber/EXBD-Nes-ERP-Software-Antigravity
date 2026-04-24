@@ -171,12 +171,17 @@ async function ensureBuild() {
 async function main() {
   await ensureBuild();
 
-  log('Starting Next.js production server via npm start...');
+  log('Starting Next.js production server directly...');
   
-  const NPM_BIN = path.join(path.dirname(NODE_BIN), 'npm');
+  const nextEntry = findNextEntry();
+  if (!nextEntry) {
+    log('FATAL: Cannot find next CLI for starting server.');
+    process.exit(1);
+  }
+
   const logStream = fs.createWriteStream(path.join(ROOT, 'production.log'), { flags: 'a' });
   
-  const child = spawn(NPM_BIN, ['run', 'start'], {
+  const child = spawn(NODE_BIN, [nextEntry, 'start', '-p', String(PORT)], {
     cwd: FRONTEND,
     env: {
       ...process.env,
