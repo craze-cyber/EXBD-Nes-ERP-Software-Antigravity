@@ -4,17 +4,18 @@
  * Features:
  * 1. Self-healing build (detects missing BUILD_ID).
  * 2. Resource-limited build (1 CPU, limited memory for shared hosts).
- * 3. Maintenance Server: Responds with "Site Building" during the build phase
- *    to prevent 503 errors and satisfy the host's health checks.
+ * 3. Maintenance Server during build phase.
+ * 4. Retry-with-backoff for port binding (handles EADDRINUSE from zombie processes).
  */
 const { spawn, execSync } = require('child_process');
 const path = require('path');
 const fs   = require('fs');
 const http = require('http');
+const net  = require('net');
 
 const ROOT     = __dirname;
 const FRONTEND = path.join(ROOT, 'Frontend');
-const PORT     = process.env.PORT || '3000';
+const PORT     = parseInt(process.env.PORT, 10) || 3000;
 const NODE_BIN = process.execPath;
 
 function log(msg) { console.log('[Sovereign ERP]', msg); }
@@ -30,7 +31,8 @@ log('PORT:     ' + PORT);
 log('node:     ' + NODE_BIN);
 log('==================');
 
-// ── Step 1: Locate next CLI ──────────────────────────────────────────────────
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
 function findNextEntry() {
   const candidates = [
     path.join(ROOT,     'node_modules', 'next', 'dist', 'bin', 'next'),
@@ -45,7 +47,40 @@ function findNextEntry() {
   return null;
 }
 
-// ── Step 2: Build with Maintenance Server ───────────────────────────────────
+/** Wait for port to become free, with retries */
+function waitForPort(port, maxRetries, delay) {
+  return new Promise((resolve, reject) => {
+    let attempt = 0;
+    function tryPort() {
+      attempt++;
+      const tester = net.createServer();
+      tester.once('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+          log(`Port ${port} busy (attempt ${attempt}/${maxRetries}). Retrying in ${delay / 1000}s...`);
+          if (attempt >= maxRetries) {
+            // Last resort: try to kill whatever is on the port
+            try { execSync(`fuser -k ${port}/tcp 2>/dev/null || true`, { stdio: 'ignore' }); } catch (e) {}
+            reject(new Error(`Port ${port} still in use after ${maxRetries} attempts.`));
+          } else {
+            setTimeout(tryPort, delay);
+          }
+        } else {
+          reject(err);
+        }
+      });
+      tester.once('listening', () => {
+        tester.close(() => {
+          log(`Port ${port} is free.`);
+          resolve();
+        });
+      });
+      tester.listen(port, '0.0.0.0');
+    }
+    tryPort();
+  });
+}
+
+// ── Step 1: Build with Maintenance Server ───────────────────────────────────
 async function ensureBuild() {
   const nextDir = path.join(FRONTEND, '.next');
   const buildId = path.join(FRONTEND, '.next', 'BUILD_ID');
@@ -55,11 +90,36 @@ async function ensureBuild() {
     return;
   }
 
-  // Start temporary server to prevent 503 during long build
-  let buildError = null;
+  log('BUILD_ID missing — need to build.');
+
+  // Ensure dependencies are installed first (before binding to port)
+  if (!findNextEntry()) {
+    log('next CLI missing — running npm install...');
+    try {
+      execSync('npm install', { 
+        cwd: ROOT, 
+        stdio: 'inherit',
+        env: { ...process.env, PATH: path.dirname(NODE_BIN) + path.delimiter + (process.env.PATH || '') }
+      });
+    } catch (e) {
+      log('npm install failed: ' + e.message);
+      process.exit(1);
+    }
+  }
+
+  const nextEntry = findNextEntry();
+  if (!nextEntry) {
+    log('FATAL: Cannot find next CLI even after npm install.');
+    process.exit(1);
+  }
+
+  // Wait for port to be free before starting maintenance server
+  await waitForPort(PORT, 15, 3000);
+
+  // Start maintenance server
   const connections = new Set();
   const maintenanceServer = http.createServer((req, res) => {
-    res.writeHead(buildError ? 500 : 200, { 'Content-Type': 'text/html' });
+    res.writeHead(200, { 'Content-Type': 'text/html' });
     res.end(`
       <!DOCTYPE html>
       <html>
@@ -72,22 +132,15 @@ async function ensureBuild() {
           p { color: #A1A1AA; font-size: 15px; line-height: 1.6; }
           .spinner { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #2B7A42; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px auto; }
           @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-          .error { color: #EF4444; background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.2); font-family: monospace; font-size: 12px; margin-top: 20px; text-align: left; overflow-x: auto; }
         </style>
       </head>
       <body>
         <div class="card">
           <h1>Sovereign ERP</h1>
-          ${buildError ? `
-            <p>A problem occurred during the system update.</p>
-            <div class="error">${buildError}</div>
-            <p style="font-size: 12px; margin-top: 20px;">Please check Hostinger Runtime Logs for details.</p>
-          ` : `
-            <p>We are currently updating the application and building fresh assets. This process usually takes 2-5 minutes.</p>
-            <div class="spinner"></div>
-            <p style="font-size: 12px;">This page will automatically refresh when ready.</p>
-            <script>setTimeout(() => location.reload(), 20000);</script>
-          `}
+          <p>We are currently updating the application. This usually takes 2-5 minutes.</p>
+          <div class="spinner"></div>
+          <p style="font-size: 12px;">This page will automatically refresh when ready.</p>
+          <script>setTimeout(() => location.reload(), 20000);</script>
         </div>
       </body>
       </html>
@@ -99,52 +152,17 @@ async function ensureBuild() {
     conn.on('close', () => connections.delete(conn));
   });
 
-  const stopMaintenance = (cb) => {
-    log('Stopping maintenance server and forcing connection close...');
-    for (const conn of connections) conn.destroy();
-    maintenanceServer.close(cb);
-  };
-
-  if (isNaN(PORT)) {
-    maintenanceServer.listen(PORT);
-    log('Maintenance server listening on socket: ' + PORT);
-  } else {
-    maintenanceServer.listen(PORT, '0.0.0.0');
-    log('Maintenance server listening on port: ' + PORT + ' (0.0.0.0)');
-  }
+  maintenanceServer.listen(PORT, '0.0.0.0');
+  log('Maintenance server listening on port: ' + PORT);
 
   if (fs.existsSync(nextDir)) {
     log('Cleaning partial .next directory...');
     fs.rmSync(nextDir, { recursive: true, force: true });
   }
 
-  // Ensure dependencies are installed
-  if (!findNextEntry()) {
-    log('next CLI missing — running npm install...');
-    try {
-      execSync('npm install', { 
-        cwd: ROOT, 
-        stdio: 'inherit',
-        env: { ...process.env, PATH: path.dirname(NODE_BIN) + path.delimiter + (process.env.PATH || '') }
-      });
-    } catch (e) {
-      log('npm install failed: ' + e.message);
-      buildError = 'npm install failed: ' + e.message;
-    }
-  }
+  log('Starting build...');
 
-  const nextEntry = findNextEntry();
-  if (!nextEntry && !buildError) {
-    buildError = 'FATAL: Cannot find next CLI even after npm install.';
-  }
-
-  if (buildError) {
-    return new Promise(() => {}); 
-  }
-
-  log('BUILD_ID missing — starting build...');
-  
-  return new Promise((resolve) => {
+  await new Promise((resolve, reject) => {
     const build = spawn(NODE_BIN, [nextEntry, 'build', '--webpack'], {
       cwd: FRONTEND,
       stdio: 'inherit',
@@ -157,52 +175,50 @@ async function ensureBuild() {
       },
     });
 
-    build.on('error', (err) => {
-      log('Build spawn error: ' + err.message);
-      buildError = 'Build spawn error: ' + err.message;
-    });
-
+    build.on('error', (err) => reject(err));
     build.on('close', (code) => {
       if (code === 0) {
         log('Build successful.');
-        stopMaintenance(() => {
-          log('Port released. Waiting 5 seconds for OS cleanup...');
-          setTimeout(resolve, 5000);
-        });
+        resolve();
       } else {
-        log('Build failed with code ' + code);
-        buildError = 'Build failed with code ' + code + '. See logs for details.';
+        reject(new Error('Build failed with code ' + code));
       }
     });
   });
+
+  // Stop maintenance server and release port
+  log('Stopping maintenance server...');
+  for (const conn of connections) conn.destroy();
+  await new Promise((resolve) => maintenanceServer.close(resolve));
+  log('Maintenance server stopped. Waiting for port release...');
+  
+  // Give OS time to fully release the port
+  await new Promise((r) => setTimeout(r, 3000));
 }
 
-// ── Step 3: Run ──────────────────────────────────────────────────────────────
+// ── Step 2: Run ──────────────────────────────────────────────────────────────
 async function main() {
   await ensureBuild();
 
-  log('Starting Next.js production server directly on 127.0.0.1...');
-  
   const nextEntry = findNextEntry();
   if (!nextEntry) {
     log('FATAL: Cannot find next CLI for starting server.');
     process.exit(1);
   }
 
-  // Attempt to kill zombie processes on the port if possible
-  try {
-    const { execSync } = require('child_process');
-    execSync(`fuser -k ${PORT}/tcp || true`, { stdio: 'ignore' });
-  } catch (e) {}
+  // Wait for port to be completely free (handles zombie processes from previous runs)
+  log('Waiting for port ' + PORT + ' to be available...');
+  await waitForPort(PORT, 20, 2000);
+
+  log('Starting Next.js production server...');
 
   const logStream = fs.createWriteStream(path.join(ROOT, 'production.log'), { flags: 'a' });
   
-  const child = spawn(NODE_BIN, [nextEntry, 'start', '-H', '127.0.0.1', '-p', String(PORT)], {
+  const child = spawn(NODE_BIN, [nextEntry, 'start', '-H', '0.0.0.0', '-p', String(PORT)], {
     cwd: FRONTEND,
     env: {
       ...process.env,
       PORT: String(PORT),
-      HOSTNAME: '127.0.0.1',
       NODE_ENV: 'production',
       NEXT_CPU_COUNT: '1',
       NODE_OPTIONS: '--max-old-space-size=1024',
@@ -212,6 +228,8 @@ async function main() {
 
   child.stdout.pipe(logStream);
   child.stderr.pipe(logStream);
+  child.stdout.pipe(process.stdout);
+  child.stderr.pipe(process.stderr);
 
   child.on('error', (err) => { 
     log('Spawn error: ' + err.message); 
@@ -223,21 +241,10 @@ async function main() {
     process.exit(code || 0); 
   });
 
-  // Self-ping to keep the process "hot" and prevent Hostinger from killing it
+  // Heartbeat every 60 seconds
   setInterval(() => {
-    if (!isNaN(PORT)) {
-      http.get(`http://127.0.0.1:${PORT}/`, (res) => {
-        log(`Self-ping: Status ${res.statusCode}`);
-      }).on('error', (e) => {
-        log(`Self-ping error: ${e.message}`);
-      });
-    }
-  }, 30000); // Every 30 seconds
-
-  // Heartbeat for process manager
-  setInterval(() => {
-    log('Heartbeat: Process is alive.');
-  }, 60000); // Every minute
+    log('Heartbeat: alive');
+  }, 60000);
 
   process.on('SIGTERM', () => child.kill('SIGTERM'));
   process.on('SIGINT',  () => child.kill('SIGINT'));
