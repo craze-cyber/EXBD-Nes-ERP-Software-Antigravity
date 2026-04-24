@@ -181,7 +181,7 @@ async function ensureBuild() {
 async function main() {
   await ensureBuild();
 
-  log('Starting Next.js production server directly...');
+  log('Starting Next.js production server directly on 127.0.0.1...');
   
   const nextEntry = findNextEntry();
   if (!nextEntry) {
@@ -189,16 +189,23 @@ async function main() {
     process.exit(1);
   }
 
+  // Attempt to kill zombie processes on the port if possible
+  try {
+    const { execSync } = require('child_process');
+    execSync(`fuser -k ${PORT}/tcp || true`, { stdio: 'ignore' });
+  } catch (e) {}
+
   const logStream = fs.createWriteStream(path.join(ROOT, 'production.log'), { flags: 'a' });
   
-  const child = spawn(NODE_BIN, [nextEntry, 'start', '-H', '0.0.0.0', '-p', String(PORT)], {
+  const child = spawn(NODE_BIN, [nextEntry, 'start', '-H', '127.0.0.1', '-p', String(PORT)], {
     cwd: FRONTEND,
     env: {
       ...process.env,
       PORT: String(PORT),
+      HOSTNAME: '127.0.0.1',
       NODE_ENV: 'production',
       NEXT_CPU_COUNT: '1',
-      NODE_OPTIONS: '--max-old-space-size=1024',
+      NODE_OPTIONS: '--max-old-space-size=1536', // Increased memory
       PATH: path.dirname(NODE_BIN) + path.delimiter + (process.env.PATH || ''),
     },
   });
