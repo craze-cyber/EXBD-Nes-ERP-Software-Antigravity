@@ -4,6 +4,7 @@ import path from "path";
 const nextConfig: NextConfig = {
   images: { unoptimized: true },
   transpilePackages: ["@sovereign/backend", "@sovereign/database"],
+  turbopack: {},
   
   // NOTE: We are using the `--webpack` flag in package.json to bypass Turbopack.
   // Having `turbopack: { ... }` in Next.js 16 ENABLES Turbopack, which spawns
