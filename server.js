@@ -174,9 +174,10 @@ async function main() {
   log('Starting Next.js production server via npm start...');
   
   const NPM_BIN = path.join(path.dirname(NODE_BIN), 'npm');
+  const logStream = fs.createWriteStream(path.join(ROOT, 'production.log'), { flags: 'a' });
+  
   const child = spawn(NPM_BIN, ['run', 'start'], {
     cwd: FRONTEND,
-    stdio: 'inherit',
     env: {
       ...process.env,
       PORT: String(PORT),
@@ -187,17 +188,27 @@ async function main() {
     },
   });
 
-  child.on('error', (err) => { log('Spawn error: ' + err.message); process.exit(1); });
+  child.stdout.pipe(logStream);
+  child.stderr.pipe(logStream);
+  child.stdout.pipe(process.stdout);
+  child.stderr.pipe(process.stderr);
+
+  child.on('error', (err) => { 
+    log('Spawn error: ' + err.message); 
+    fs.appendFileSync(path.join(ROOT, 'production.log'), 'Spawn error: ' + err.message + '\n');
+    process.exit(1); 
+  });
+  
   child.on('close', (code) => { 
     log('Next.js process exited with code ' + code); 
-    // Restart if it crashed? No, let Hostinger handle it or it might loop.
+    fs.appendFileSync(path.join(ROOT, 'production.log'), 'Next.js process exited with code ' + code + '\n');
     process.exit(code || 0); 
   });
 
-  // Heartbeat to prevent Hostinger from killing the process due to "inactivity"
+  // Heartbeat
   setInterval(() => {
     log('Heartbeat: Process is alive.');
-  }, 300000); // Every 5 minutes
+  }, 300000);
 
   process.on('SIGTERM', () => child.kill('SIGTERM'));
   process.on('SIGINT',  () => child.kill('SIGINT'));
