@@ -57,6 +57,7 @@ async function ensureBuild() {
 
   // Start temporary server to prevent 503 during long build
   let buildError = null;
+  const connections = new Set();
   const maintenanceServer = http.createServer((req, res) => {
     res.writeHead(buildError ? 500 : 200, { 'Content-Type': 'text/html' });
     res.end(`
@@ -93,6 +94,17 @@ async function ensureBuild() {
     `);
   });
 
+  maintenanceServer.on('connection', (conn) => {
+    connections.add(conn);
+    conn.on('close', () => connections.delete(conn));
+  });
+
+  const stopMaintenance = (cb) => {
+    log('Stopping maintenance server and forcing connection close...');
+    for (const conn of connections) conn.destroy();
+    maintenanceServer.close(cb);
+  };
+
   if (isNaN(PORT)) {
     maintenanceServer.listen(PORT);
     log('Maintenance server listening on socket: ' + PORT);
@@ -127,14 +139,12 @@ async function ensureBuild() {
   }
 
   if (buildError) {
-    // Keep maintenance server running with error
     return new Promise(() => {}); 
   }
 
   log('BUILD_ID missing — starting build...');
   
   return new Promise((resolve) => {
-    // Explicitly use --webpack to avoid Turbopack thread issues on Hostinger
     const build = spawn(NODE_BIN, [nextEntry, 'build', '--webpack'], {
       cwd: FRONTEND,
       stdio: 'inherit',
@@ -155,13 +165,13 @@ async function ensureBuild() {
     build.on('close', (code) => {
       if (code === 0) {
         log('Build successful.');
-        maintenanceServer.close(() => {
-          setTimeout(resolve, 2000);
+        stopMaintenance(() => {
+          log('Port released. Waiting 5 seconds for OS cleanup...');
+          setTimeout(resolve, 5000);
         });
       } else {
         log('Build failed with code ' + code);
         buildError = 'Build failed with code ' + code + '. See logs for details.';
-        // Keep maintenance server alive to show error instead of 503
       }
     });
   });
