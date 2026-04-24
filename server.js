@@ -205,32 +205,39 @@ async function main() {
       HOSTNAME: '127.0.0.1',
       NODE_ENV: 'production',
       NEXT_CPU_COUNT: '1',
-      NODE_OPTIONS: '--max-old-space-size=1536', // Increased memory
+      NODE_OPTIONS: '--max-old-space-size=1024',
       PATH: path.dirname(NODE_BIN) + path.delimiter + (process.env.PATH || ''),
     },
   });
 
   child.stdout.pipe(logStream);
   child.stderr.pipe(logStream);
-  child.stdout.pipe(process.stdout);
-  child.stderr.pipe(process.stderr);
 
   child.on('error', (err) => { 
     log('Spawn error: ' + err.message); 
-    fs.appendFileSync(path.join(ROOT, 'production.log'), 'Spawn error: ' + err.message + '\n');
     process.exit(1); 
   });
   
   child.on('close', (code) => { 
     log('Next.js process exited with code ' + code); 
-    fs.appendFileSync(path.join(ROOT, 'production.log'), 'Next.js process exited with code ' + code + '\n');
     process.exit(code || 0); 
   });
 
-  // Heartbeat
+  // Self-ping to keep the process "hot" and prevent Hostinger from killing it
+  setInterval(() => {
+    if (!isNaN(PORT)) {
+      http.get(`http://127.0.0.1:${PORT}/`, (res) => {
+        log(`Self-ping: Status ${res.statusCode}`);
+      }).on('error', (e) => {
+        log(`Self-ping error: ${e.message}`);
+      });
+    }
+  }, 30000); // Every 30 seconds
+
+  // Heartbeat for process manager
   setInterval(() => {
     log('Heartbeat: Process is alive.');
-  }, 300000);
+  }, 60000); // Every minute
 
   process.on('SIGTERM', () => child.kill('SIGTERM'));
   process.on('SIGINT',  () => child.kill('SIGINT'));
