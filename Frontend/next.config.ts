@@ -4,18 +4,14 @@ import path from "path";
 const nextConfig: NextConfig = {
   images: { unoptimized: true },
   transpilePackages: ["@sovereign/backend", "@sovereign/database"],
-<<<<<<< HEAD
-  turbopack: {
-    root: path.resolve(__dirname, ".."),
-  },
-=======
-  // NOTE: Do NOT add a `turbopack` key here.
+  
+  // NOTE: We are using the `--webpack` flag in package.json to bypass Turbopack.
   // Having `turbopack: { ... }` in Next.js 16 ENABLES Turbopack, which spawns
   // worker threads that are blocked by Hostinger's shared hosting OS limits (EAGAIN).
-  // Webpack (the default when turbopack is absent) builds single-threaded and works fine.
+  // Webpack builds single-threaded and works fine in this environment.
   webpack(config) {
-    // Replicate the monorepo root resolution that turbopack.root provided,
-    // so workspace packages (@sovereign/*) are found correctly.
+    // Replicate the monorepo root resolution so workspace packages (@sovereign/*) 
+    // are found correctly when using webpack.
     config.resolve.alias = {
       ...config.resolve.alias,
       "@sovereign/database": path.resolve(__dirname, "../Database/src/index.ts"),
@@ -27,8 +23,6 @@ const nextConfig: NextConfig = {
     workerThreads: false,
     cpus: 1
   }
->>>>>>> ccc5bb0659e072d3973c1cb90cb6d85e1644e784
 };
 
 export default nextConfig;
-
