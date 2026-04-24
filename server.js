@@ -56,15 +56,40 @@ async function ensureBuild() {
   }
 
   // Start temporary server to prevent 503 during long build
+  let buildError = null;
   const maintenanceServer = http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.writeHead(buildError ? 500 : 200, { 'Content-Type': 'text/html' });
     res.end(`
-      <div style="font-family:sans-serif;text-align:center;padding:50px;background:#0A0A0F;color:white;">
-        <h1 style="color:#2B7A42;">Sovereign ERP</h1>
-        <p>Updating and building application... This may take 2-5 minutes.</p>
-        <p>This page will automatically refresh when ready.</p>
-        <script>setTimeout(() => location.reload(), 15000);</script>
-      </div>
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Sovereign ERP | System Update</title>
+        <style>
+          body { background: #0A0A0F; color: white; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+          .card { background: #111118; padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); text-align: center; max-width: 500px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+          h1 { color: #2B7A42; margin-top: 0; font-size: 24px; }
+          p { color: #A1A1AA; font-size: 15px; line-height: 1.6; }
+          .spinner { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid #2B7A42; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px auto; }
+          @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+          .error { color: #EF4444; background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.2); font-family: monospace; font-size: 12px; margin-top: 20px; text-align: left; overflow-x: auto; }
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <h1>Sovereign ERP</h1>
+          ${buildError ? `
+            <p>A problem occurred during the system update.</p>
+            <div class="error">${buildError}</div>
+            <p style="font-size: 12px; margin-top: 20px;">Please check Hostinger Runtime Logs for details.</p>
+          ` : `
+            <p>We are currently updating the application and building fresh assets. This process usually takes 2-5 minutes.</p>
+            <div class="spinner"></div>
+            <p style="font-size: 12px;">This page will automatically refresh when ready.</p>
+            <script>setTimeout(() => location.reload(), 20000);</script>
+          `}
+        </div>
+      </body>
+      </html>
     `);
   });
 
@@ -88,17 +113,22 @@ async function ensureBuild() {
       execSync('npm install', { 
         cwd: ROOT, 
         stdio: 'inherit',
-        env: { ...process.env, PATH: path.dirname(NODE_BIN) + ':' + (process.env.PATH || '') }
+        env: { ...process.env, PATH: path.dirname(NODE_BIN) + path.delimiter + (process.env.PATH || '') }
       });
     } catch (e) {
       log('npm install failed: ' + e.message);
+      buildError = 'npm install failed: ' + e.message;
     }
   }
 
   const nextEntry = findNextEntry();
-  if (!nextEntry) {
-    log('FATAL: Cannot find next CLI even after npm install.');
-    process.exit(1);
+  if (!nextEntry && !buildError) {
+    buildError = 'FATAL: Cannot find next CLI even after npm install.';
+  }
+
+  if (buildError) {
+    // Keep maintenance server running with error
+    return new Promise(() => {}); 
   }
 
   log('BUILD_ID missing — starting build...');
@@ -119,20 +149,20 @@ async function ensureBuild() {
 
     build.on('error', (err) => {
       log('Build spawn error: ' + err.message);
-      maintenanceServer.close(() => process.exit(1));
+      buildError = 'Build spawn error: ' + err.message;
     });
 
     build.on('close', (code) => {
-      maintenanceServer.close(() => {
-        if (code === 0) {
-          log('Build successful.');
-          // Small delay to ensure port is released by the OS
+      if (code === 0) {
+        log('Build successful.');
+        maintenanceServer.close(() => {
           setTimeout(resolve, 2000);
-        } else {
-          log('Build failed with code ' + code);
-          process.exit(1);
-        }
-      });
+        });
+      } else {
+        log('Build failed with code ' + code);
+        buildError = 'Build failed with code ' + code + '. See logs for details.';
+        // Keep maintenance server alive to show error instead of 503
+      }
     });
   });
 }
