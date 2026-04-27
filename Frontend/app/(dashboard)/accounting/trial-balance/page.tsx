@@ -117,12 +117,12 @@ export default function TrialBalance() {
       {/* Period Filter */}
       <div className="glass p-4 rounded-2xl flex flex-col md:flex-row md:items-center gap-4">
         <div>
-          <label className="text-[10px] uppercase text-zinc-500 font-bold">Period From</label>
-          <input type="date" value={periodFrom} onChange={e => setPeriodFrom(e.target.value)} className="w-full mt-1 bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-sm outline-none focus:border-emerald-500/50 [color-scheme:dark]" />
+          <label htmlFor="tb-period-from" className="text-[10px] uppercase text-zinc-500 font-bold">Period From</label>
+          <input id="tb-period-from" type="date" value={periodFrom} onChange={e => setPeriodFrom(e.target.value)} className="w-full mt-1 bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-sm outline-none focus:border-emerald-500/50 [color-scheme:dark]" />
         </div>
         <div>
-          <label className="text-[10px] uppercase text-zinc-500 font-bold">Period To</label>
-          <input type="date" value={periodTo} onChange={e => setPeriodTo(e.target.value)} className="w-full mt-1 bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-sm outline-none focus:border-emerald-500/50 [color-scheme:dark]" />
+          <label htmlFor="tb-period-to" className="text-[10px] uppercase text-zinc-500 font-bold">Period To</label>
+          <input id="tb-period-to" type="date" value={periodTo} onChange={e => setPeriodTo(e.target.value)} className="w-full mt-1 bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-sm outline-none focus:border-emerald-500/50 [color-scheme:dark]" />
         </div>
       </div>
 

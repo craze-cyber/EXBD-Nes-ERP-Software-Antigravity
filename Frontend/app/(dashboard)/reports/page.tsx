@@ -157,12 +157,28 @@ export default function ReportsPage() {
               className="pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-xl text-sm outline-none focus:border-emerald-500/50 w-64"
             />
           </div>
-          <input 
-            type="month" 
-            value={period} 
-            onChange={e => setPeriod(e.target.value)} 
-            className="bg-white/5 border border-white/10 rounded-xl py-2 px-3 text-sm outline-none focus:border-emerald-500/50 [color-scheme:dark]" 
-          />
+          <div className="flex items-center gap-1">
+            <select
+              value={period.slice(0, 4)}
+              onChange={e => setPeriod(`${e.target.value}-${period.slice(5, 7)}`)}
+              aria-label="Report year"
+              className="bg-white/5 border border-white/10 rounded-xl py-2 px-3 text-sm outline-none focus:border-emerald-500/50"
+            >
+              {Array.from({ length: 6 }, (_, i) => new Date().getFullYear() - 2 + i).map(y => (
+                <option key={y} value={y}>{y}</option>
+              ))}
+            </select>
+            <select
+              value={period.slice(5, 7)}
+              onChange={e => setPeriod(`${period.slice(0, 4)}-${e.target.value}`)}
+              aria-label="Report month"
+              className="bg-white/5 border border-white/10 rounded-xl py-2 px-3 text-sm outline-none focus:border-emerald-500/50"
+            >
+              {["01","02","03","04","05","06","07","08","09","10","11","12"].map(m => (
+                <option key={m} value={m}>{new Date(2000, Number(m) - 1).toLocaleString("en", { month: "short" })}</option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 

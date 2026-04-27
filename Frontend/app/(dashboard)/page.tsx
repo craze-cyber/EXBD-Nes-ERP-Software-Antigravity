@@ -1,6 +1,19 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+
+function ProgressBar({ pct }: { pct: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (ref.current) ref.current.style.width = `${pct}%`;
+  }, [pct]);
+  return (
+    <div
+      ref={ref}
+      className="h-full bg-gradient-to-r from-[var(--primary)] to-emerald-400 rounded-full transition-all duration-1000"
+    />
+  );
+}
 import { insforge } from "@/lib/insforge";
 import {
   Users, UserSquare2, DollarSign, Building2, Shield, AlertTriangle,
@@ -240,10 +253,7 @@ export default function DashboardOverview() {
                 <div key={client} className="flex items-center gap-3">
                   <span className="text-xs text-zinc-400 w-28 truncate shrink-0">{client}</span>
                   <div className="flex-1 h-6 bg-white/5 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-[var(--primary)] to-emerald-400 rounded-full transition-all duration-1000"
-                      style={{ width: `${(total / maxSalary) * 100}%` }}
-                    />
+                    <ProgressBar pct={(total / maxSalary) * 100} />
                   </div>
                   <span className="text-xs font-mono text-emerald-400 w-20 text-right shrink-0 tabular-nums">
                     {(total / 1000).toFixed(1)}k

@@ -428,13 +428,14 @@ export default function UserManagement() {
             <select
               value={filterRole}
               onChange={e => setFilterRole(e.target.value)}
+              aria-label="Filter by role"
               className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-zinc-300 outline-none appearance-none"
             >
               <option value="all" className="bg-[#0e0e12]">All Roles</option>
               <option value="master_admin" className="bg-[#0e0e12]">Master Admin</option>
               {ROLES.map(r => <option key={r.value} value={r.value} className="bg-[#0e0e12]">{r.label}</option>)}
             </select>
-            <button onClick={fetchUsers} className="p-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-zinc-400 hover:text-white transition-colors">
+            <button onClick={fetchUsers} aria-label="Refresh users" className="p-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-zinc-400 hover:text-white transition-colors">
               <RefreshCw className="w-4 h-4" />
             </button>
           </div>
@@ -737,7 +738,7 @@ export default function UserManagement() {
                 <h2 className="text-base font-bold text-white">Create New User</h2>
                 <p className="text-xs text-zinc-500 mt-0.5">Account will be created with default role permissions</p>
               </div>
-              <button onClick={() => setShowCreate(false)} className="text-zinc-600 hover:text-white transition-colors">
+              <button onClick={() => setShowCreate(false)} aria-label="Close modal" className="text-zinc-600 hover:text-white transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -833,7 +834,7 @@ export default function UserManagement() {
                 <h2 className="text-base font-bold text-white">Change Role</h2>
                 <p className="text-xs text-zinc-500 mt-0.5">{editUser.full_name}</p>
               </div>
-              <button onClick={() => setEditUser(null)} className="text-zinc-600 hover:text-white"><X className="w-5 h-5" /></button>
+              <button onClick={() => setEditUser(null)} aria-label="Close modal" className="text-zinc-600 hover:text-white"><X className="w-5 h-5" /></button>
             </div>
             <div className="p-5 space-y-1.5">
               {ROLES.map(r => (
@@ -876,7 +877,7 @@ export default function UserManagement() {
                 <h2 className="text-base font-bold text-white">Reset Password</h2>
                 <p className="text-xs text-zinc-500 mt-0.5">{resetUser.full_name}</p>
               </div>
-              <button onClick={() => setResetUser(null)} className="text-zinc-600 hover:text-white"><X className="w-5 h-5" /></button>
+              <button onClick={() => setResetUser(null)} aria-label="Close modal" className="text-zinc-600 hover:text-white"><X className="w-5 h-5" /></button>
             </div>
             <div className="p-6 space-y-4">
               <div className="flex items-start gap-3 p-3 bg-amber-500/8 border border-amber-500/20 rounded-xl">

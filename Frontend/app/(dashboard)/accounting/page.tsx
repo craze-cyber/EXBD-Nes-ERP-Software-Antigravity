@@ -120,7 +120,7 @@ export default function AccountingDashboard() {
           <div className="bg-[#050505] border border-white/10 rounded-2xl shadow-2xl w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-bold text-white">New Account</h2>
-              <button onClick={() => setShowForm(false)} className="text-zinc-500 hover:text-white"><X className="w-5 h-5" /></button>
+              <button onClick={() => setShowForm(false)} aria-label="Close dialog" className="text-zinc-500 hover:text-white"><X className="w-5 h-5" /></button>
             </div>
             <div className="space-y-4">
               <div>
@@ -132,8 +132,8 @@ export default function AccountingDashboard() {
                 <input value={formData.name} onChange={e => setFormData(p => ({ ...p, name: e.target.value }))} className="w-full mt-1 bg-white/5 border border-white/10 rounded-xl py-2.5 px-4 text-sm outline-none focus:border-emerald-500/50" placeholder="e.g. Insurance Expense" />
               </div>
               <div>
-                <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Type</label>
-                <select value={formData.type} onChange={e => setFormData(p => ({ ...p, type: e.target.value }))} className="w-full mt-1 bg-white/5 border border-white/10 rounded-xl py-2.5 px-4 text-sm outline-none focus:border-emerald-500/50 appearance-none">
+                <label htmlFor="account-type" className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Type</label>
+                <select id="account-type" value={formData.type} onChange={e => setFormData(p => ({ ...p, type: e.target.value }))} className="w-full mt-1 bg-white/5 border border-white/10 rounded-xl py-2.5 px-4 text-sm outline-none focus:border-emerald-500/50 appearance-none">
                   <option value="asset" className="bg-[#050505]">Asset</option>
                   <option value="liability" className="bg-[#050505]">Liability</option>
                   <option value="equity" className="bg-[#050505]">Equity</option>
@@ -142,15 +142,15 @@ export default function AccountingDashboard() {
                 </select>
               </div>
               <div>
-                <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Parent Account</label>
-                <select value={formData.parent_id} onChange={e => setFormData(p => ({ ...p, parent_id: e.target.value }))} className="w-full mt-1 bg-white/5 border border-white/10 rounded-xl py-2.5 px-4 text-sm outline-none focus:border-emerald-500/50 appearance-none">
+                <label htmlFor="parent-account" className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Parent Account</label>
+                <select id="parent-account" value={formData.parent_id} onChange={e => setFormData(p => ({ ...p, parent_id: e.target.value }))} className="w-full mt-1 bg-white/5 border border-white/10 rounded-xl py-2.5 px-4 text-sm outline-none focus:border-emerald-500/50 appearance-none">
                   <option value="" className="bg-[#050505]">— None (Root) —</option>
                   {accounts.map(a => <option key={a.id} value={a.id} className="bg-[#050505]">{a.code} - {a.name}</option>)}
                 </select>
               </div>
               <div>
-                <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Description</label>
-                <input value={formData.description} onChange={e => setFormData(p => ({ ...p, description: e.target.value }))} className="w-full mt-1 bg-white/5 border border-white/10 rounded-xl py-2.5 px-4 text-sm outline-none focus:border-emerald-500/50" />
+                <label htmlFor="account-description" className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Description</label>
+                <input id="account-description" value={formData.description} onChange={e => setFormData(p => ({ ...p, description: e.target.value }))} className="w-full mt-1 bg-white/5 border border-white/10 rounded-xl py-2.5 px-4 text-sm outline-none focus:border-emerald-500/50" />
               </div>
               <button onClick={handleAddAccount} className="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-xl transition-all text-sm">Create Account</button>
             </div>

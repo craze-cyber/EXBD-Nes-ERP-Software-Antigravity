@@ -138,6 +138,7 @@ export default function ApprovalsPage() {
           <select
             value={moduleFilter}
             onChange={e => setModuleFilter(e.target.value)}
+            aria-label="Filter by module"
             className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-primary/50"
           >
             <option value="all">All Modules</option>

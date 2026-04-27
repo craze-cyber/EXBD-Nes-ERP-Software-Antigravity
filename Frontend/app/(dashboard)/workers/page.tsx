@@ -199,7 +199,7 @@ export default function WorkersPage() {
       {isFormOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
           <div className="glass w-full max-w-2xl h-[85vh] flex flex-col p-8 pb-0 rounded-[32px] border-white/10 relative animate-in zoom-in-95 duration-200">
-            <button onClick={closeForm} className="absolute top-6 right-6 p-2 rounded-full hover:bg-white/10 transition-colors text-zinc-400 z-10">
+            <button onClick={closeForm} aria-label="Close modal" className="absolute top-6 right-6 p-2 rounded-full hover:bg-white/10 transition-colors text-zinc-400 z-10">
               <X className="w-6 h-6" />
             </button>
             <div className="mb-6 shrink-0">

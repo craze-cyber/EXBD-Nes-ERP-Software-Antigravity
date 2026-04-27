@@ -144,6 +144,7 @@ export default function Sidebar({ onClose }: SidebarProps) {
         {onClose && (
           <button
             onClick={onClose}
+            aria-label="Close sidebar"
             className="lg:hidden flex-shrink-0 p-1.5 rounded-lg text-zinc-500 hover:text-white hover:bg-white/10 transition-colors"
           >
             <X className="w-4 h-4" />

@@ -147,18 +147,18 @@ export default function GeneralLedger() {
                 <h2 className="text-xl font-bold text-white">{selectedAccount.code} — {selectedAccount.name}</h2>
                 <p className="text-xs text-zinc-500 uppercase tracking-widest mt-1">Transaction History</p>
               </div>
-              <button onClick={() => setSelectedAccount(null)} className="p-2 hover:bg-white/10 rounded-full transition-all"><X className="w-6 h-6 text-zinc-500" /></button>
+              <button onClick={() => setSelectedAccount(null)} aria-label="Close account details" className="p-2 hover:bg-white/10 rounded-full transition-all"><X className="w-6 h-6 text-zinc-500" /></button>
             </div>
             
             {/* Drawer Filters */}
             <div className="p-4 bg-white/[0.02] border-b border-white/5 flex gap-4">
               <div className="flex-1">
-                <label className="text-[10px] uppercase text-zinc-500 font-bold ml-1">From</label>
-                <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="w-full mt-1 bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-sm outline-none focus:border-emerald-500/50 [color-scheme:dark]" />
+                <label htmlFor="ledger-date-from" className="text-[10px] uppercase text-zinc-500 font-bold ml-1">From</label>
+                <input id="ledger-date-from" type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="w-full mt-1 bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-sm outline-none focus:border-emerald-500/50 [color-scheme:dark]" />
               </div>
               <div className="flex-1">
-                <label className="text-[10px] uppercase text-zinc-500 font-bold ml-1">To</label>
-                <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="w-full mt-1 bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-sm outline-none focus:border-emerald-500/50 [color-scheme:dark]" />
+                <label htmlFor="ledger-date-to" className="text-[10px] uppercase text-zinc-500 font-bold ml-1">To</label>
+                <input id="ledger-date-to" type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="w-full mt-1 bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-sm outline-none focus:border-emerald-500/50 [color-scheme:dark]" />
               </div>
             </div>
 
@@ -221,7 +221,7 @@ export default function GeneralLedger() {
                 </h3>
                 <p className="text-xs text-zinc-500 mt-1">Workers contributing to this transaction.</p>
               </div>
-              <button onClick={() => setShowDrillDown(false)} className="p-2 hover:bg-white/10 rounded-full transition-all"><X className="w-5 h-5 text-zinc-500" /></button>
+              <button onClick={() => setShowDrillDown(false)} aria-label="Close payroll breakdown" className="p-2 hover:bg-white/10 rounded-full transition-all"><X className="w-5 h-5 text-zinc-500" /></button>
             </div>
             <div className="flex-1 overflow-auto">
               <table className="w-full text-sm text-left">

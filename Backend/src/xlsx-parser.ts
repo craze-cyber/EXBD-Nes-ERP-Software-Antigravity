@@ -73,17 +73,31 @@ export async function parseWorkerXLSX(file: File, dbColumns: string[], existingC
                value = null;
             }
 
-            // Clear dirty textual anomalies from strict Date columns so they don't break pg dates
+            // Strict date column guard — rejects non-date values (Iqama numbers, phone
+            // numbers, etc.) that land in date columns due to sheet misalignment or typos
             const DATE_COLUMNS = [
-               "iqama_expiry", "joining_date", "dob", "passport_issue_date", 
-               "passport_expiry_date", "driving_license_expiry", "date_of_joining", 
+               "iqama_expiry", "joining_date", "dob", "passport_issue_date",
+               "passport_expiry_date", "driving_license_expiry", "date_of_joining",
                "health_insurance_expiry"
             ];
-            
-            if (DATE_COLUMNS.includes(dbCol) && typeof value === "string") {
-               if (!value.match(/^\d{4}-\d{2}-\d{2}$/)) {
+
+            if (DATE_COLUMNS.includes(dbCol)) {
+              if (typeof value === "number") {
+                // Valid Excel date serials: 1 (1900-01-01) to 2958465 (9999-12-31).
+                // Anything larger (e.g. 10-digit Iqama numbers) is not a date → null.
+                if (value >= 1 && value <= 2958465) {
+                  const ms = (value - 25569) * 86400000;
+                  const d = new Date(ms);
+                  const y = d.getUTCFullYear();
+                  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+                  const day = String(d.getUTCDate()).padStart(2, "0");
+                  value = `${y}-${m}-${day}`;
+                } else {
                   value = null;
-               }
+                }
+              } else if (typeof value === "string" && !value.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                value = null;
+              }
             }
 
             mapped[dbCol] = value;

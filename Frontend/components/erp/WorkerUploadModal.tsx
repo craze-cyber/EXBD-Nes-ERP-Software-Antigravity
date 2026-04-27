@@ -147,7 +147,7 @@ export default function WorkerUploadModal({ isOpen, onClose, onSuccess, clients,
             </h2>
             <p className="text-zinc-400 text-sm mt-1">Upload records via XLSX format.</p>
           </div>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-colors text-zinc-400">
+          <button onClick={onClose} aria-label="Close modal" className="p-2 rounded-full hover:bg-white/10 transition-colors text-zinc-400">
             <X className="w-6 h-6" />
           </button>
         </div>
@@ -161,7 +161,7 @@ export default function WorkerUploadModal({ isOpen, onClose, onSuccess, clients,
               <Upload className="w-12 h-12 text-zinc-500 mx-auto mb-4" />
               <h3 className="text-lg font-bold">Click to Upload XLSX</h3>
               <p className="text-sm text-zinc-400 mt-2">Maximum file size 10MB.</p>
-              <input type="file" accept=".xlsx" className="hidden" ref={fileInputRef} onChange={handleFileDrop} />
+              <input type="file" aria-label="Upload XLSX file" accept=".xlsx" className="hidden" ref={fileInputRef} onChange={handleFileDrop} />
             </div>
           ) : isParsing ? (
             <div className="flex flex-col items-center justify-center py-20 space-y-4">

@@ -70,7 +70,43 @@ export default function LoginPage() {
           toast.error(error.message);
         } else if (data?.accessToken) {
           document.cookie = `insforge-token=${data.accessToken}; path=/; max-age=604800; SameSite=Lax`;
-          toast.success("Welcome back!");
+
+          // Self-heal: if no master_admin record exists in erp_users, promote this user.
+          // Covers the case where the auth account exists but erp_users was never seeded.
+          if (data.user?.id) {
+            const { data: masterExists } = await insforge.database
+              .from("erp_users").select("id").eq("role", "master_admin").maybeSingle();
+
+            if (!masterExists) {
+              // Check by auth_id first, then by email
+              const { data: byId } = await insforge.database
+                .from("erp_users").select("id").eq("auth_id", data.user.id).maybeSingle();
+              const { data: byEmail } = !byId
+                ? await insforge.database.from("erp_users").select("id").eq("email", values.email.toLowerCase().trim()).maybeSingle()
+                : { data: null };
+              const existing = byId || byEmail;
+
+              if (existing) {
+                await insforge.database.from("erp_users")
+                  .update({ role: "master_admin", auth_id: data.user.id, is_active: true })
+                  .eq("id", existing.id);
+              } else {
+                await insforge.database.from("erp_users").insert({
+                  auth_id: data.user.id,
+                  full_name: "Master Admin",
+                  email: values.email.toLowerCase().trim(),
+                  role: "master_admin",
+                  is_active: true,
+                });
+              }
+              toast.success("Master admin initialized. Welcome!");
+            } else {
+              toast.success("Welcome back!");
+            }
+          } else {
+            toast.success("Welcome back!");
+          }
+
           window.location.href = "/";
         }
       }

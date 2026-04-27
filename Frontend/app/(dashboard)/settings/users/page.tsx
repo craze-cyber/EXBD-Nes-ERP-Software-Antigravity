@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import UserManagement from "@/components/erp/UserManagement";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { ShieldAlert, Loader2 } from "lucide-react";

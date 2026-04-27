@@ -63,7 +63,7 @@ export function ApprovalModal({ change, onClose, onDone }: Props) {
               <p className="text-xs text-gray-500">{change.module} · {change.action_type.replace(/_/g, " ")}</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-gray-500 hover:text-white transition-colors">
+          <button onClick={onClose} aria-label="Close dialog" className="text-gray-500 hover:text-white transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>

@@ -199,19 +199,23 @@ export default function WorkerForm({ initialData, clients, onSuccess, onCancel }
     { label: "Contact & Location", icon: <MapPin className="w-4 h-4" /> }
   ];
 
-  const FileInput = ({ label, dbKey }: { label: string, dbKey: string }) => (
-    <div className="space-y-2 col-span-1 border border-dashed border-white/20 p-4 rounded-xl bg-white/[0.02]">
-      <label className="text-xs font-semibold text-zinc-400 flex items-center justify-between">
-        <span>{label}</span>
-        {initialData?.[dbKey] && <span className="text-[10px] text-emerald-400 flex items-center gap-1 bg-emerald-500/10 px-2 py-0.5 rounded"><FileBadge className="w-3 h-3"/> Attached</span>}
-      </label>
-      <input 
-        type="file" 
-        onChange={(e) => handleFileChange(dbKey, e.target.files?.[0] || null)}
-        className="w-full text-xs text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 transition-all outline-none" 
-      />
-    </div>
-  );
+  const FileInput = ({ label, dbKey }: { label: string, dbKey: string }) => {
+    const inputId = `file-${dbKey}`;
+    return (
+      <div className="space-y-2 col-span-1 border border-dashed border-white/20 p-4 rounded-xl bg-white/[0.02]">
+        <label htmlFor={inputId} className="text-xs font-semibold text-zinc-400 flex items-center justify-between">
+          <span>{label}</span>
+          {initialData?.[dbKey] && <span className="text-[10px] text-emerald-400 flex items-center gap-1 bg-emerald-500/10 px-2 py-0.5 rounded"><FileBadge className="w-3 h-3"/> Attached</span>}
+        </label>
+        <input 
+          id={inputId}
+          type="file" 
+          onChange={(e) => handleFileChange(dbKey, e.target.files?.[0] || null)}
+          className="w-full text-xs text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20 transition-all outline-none" 
+        />
+      </div>
+    );
+  };
 
   return (
     <div className="flex flex-col h-full mt-4">

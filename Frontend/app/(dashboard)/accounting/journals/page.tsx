@@ -190,14 +190,14 @@ export default function JournalsPage() {
           <div className="bg-[#050505] border border-white/10 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden">
             <div className="flex items-center justify-between p-6 border-b border-white/10">
               <h2 className="text-lg font-bold text-white">New Journal Entry</h2>
-              <button onClick={() => setShowForm(false)} className="text-zinc-500 hover:text-white"><X className="w-5 h-5" /></button>
+              <button onClick={() => setShowForm(false)} aria-label="Close dialog" className="text-zinc-500 hover:text-white"><X className="w-5 h-5" /></button>
             </div>
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
               {/* Header fields */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-zinc-400 uppercase">Date *</label>
-                  <input type="date" value={form.entry_date} onChange={e => setForm(p => ({ ...p, entry_date: e.target.value }))} className="w-full mt-1 bg-white/5 border border-white/10 rounded-xl py-2.5 px-4 text-sm outline-none focus:border-emerald-500/50 [color-scheme:dark]" />
+                  <label htmlFor="journal-date" className="text-xs font-bold text-zinc-400 uppercase">Date *</label>
+                  <input id="journal-date" type="date" value={form.entry_date} onChange={e => setForm(p => ({ ...p, entry_date: e.target.value }))} className="w-full mt-1 bg-white/5 border border-white/10 rounded-xl py-2.5 px-4 text-sm outline-none focus:border-emerald-500/50 [color-scheme:dark]" />
                 </div>
                 <div className="md:col-span-2">
                   <label className="text-xs font-bold text-zinc-400 uppercase">Description *</label>
@@ -225,7 +225,7 @@ export default function JournalsPage() {
                       {lines.map((line, idx) => (
                         <tr key={idx}>
                           <td className="px-3 py-2">
-                            <select value={line.account_id} onChange={e => updateLine(idx, "account_id", e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg py-1.5 px-2 text-xs outline-none focus:border-emerald-500/50 appearance-none">
+                            <select aria-label={`Account for line ${idx + 1}`} value={line.account_id} onChange={e => updateLine(idx, "account_id", e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg py-1.5 px-2 text-xs outline-none focus:border-emerald-500/50 appearance-none">
                               <option value="">Select account...</option>
                               {accounts.map(a => <option key={a.id} value={a.id}>{a.code} — {a.name}</option>)}
                             </select>
@@ -238,7 +238,7 @@ export default function JournalsPage() {
                           </td>
                           <td className="px-3 py-2">
                             {lines.length > 2 && (
-                              <button onClick={() => removeLine(idx)} className="text-red-500 hover:text-red-400"><X className="w-3 h-3" /></button>
+                              <button onClick={() => removeLine(idx)} aria-label={`Remove line ${idx + 1}`} className="text-red-500 hover:text-red-400"><X className="w-3 h-3" /></button>
                             )}
                           </td>
                         </tr>

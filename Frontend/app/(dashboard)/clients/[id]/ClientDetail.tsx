@@ -341,7 +341,7 @@ export default function ClientDetailPage() {
           </div>
 
           {/* Upload trigger */}
-          <input ref={templateFileRef} type="file" accept=".xlsx,.xls" className="hidden" onChange={handleTemplateUpload} />
+          <input ref={templateFileRef} type="file" accept=".xlsx,.xls" aria-label="Upload payroll template file" className="hidden" onChange={handleTemplateUpload} />
           <button
             onClick={() => templateFileRef.current?.click()}
             disabled={isParsingTemplate}
@@ -384,6 +384,7 @@ export default function ClientDetailPage() {
                             <select
                               value={val}
                               onChange={(e) => setDraftMap({ ...activeMappingMap, [key]: e.target.value })}
+                              aria-label={`Map ${label} column`}
                               className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-1.5 text-xs font-mono text-white outline-none focus:border-blue-500/50 [color-scheme:dark]"
                             >
                               <option value="">— not mapped —</option>
@@ -465,6 +466,7 @@ export default function ClientDetailPage() {
                     <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1">Internal Rate (SAR)</label>
                     <input
                       type="number"
+                      aria-label="Internal Rate (SAR)"
                       className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 font-mono text-sm focus:ring-1 focus:ring-emerald-500 outline-none"
                       value={client.payroll_config?.internal_rate_per_order || 0}
                       onChange={(e) => updateConfig('internal_rate_per_order', Number(e.target.value))}
@@ -474,6 +476,7 @@ export default function ClientDetailPage() {
                     <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1">Internal VAT (%)</label>
                     <input
                       type="number"
+                      aria-label="Internal VAT (%)"
                       className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 font-mono text-sm focus:ring-1 focus:ring-emerald-500 outline-none"
                       value={Math.round((client.payroll_config?.internal_vat_rate || 0) * 100)}
                       onChange={(e) => updateConfig('internal_vat_rate', Number(e.target.value) / 100)}
@@ -486,6 +489,7 @@ export default function ClientDetailPage() {
                     <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1">External Rate (SAR)</label>
                     <input
                       type="number"
+                      aria-label="External Rate (SAR)"
                       className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 font-mono text-sm focus:ring-1 focus:ring-emerald-500 outline-none"
                       value={client.payroll_config?.external_rate_per_order || 0}
                       onChange={(e) => updateConfig('external_rate_per_order', Number(e.target.value))}
@@ -543,6 +547,7 @@ export default function ClientDetailPage() {
               <select
                 value={client.payroll_config?.parser_type || 'auto'}
                 onChange={(e) => updateConfig('parser_type', e.target.value)}
+                aria-label="Parser Override"
                 className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 text-sm focus:ring-1 focus:ring-emerald-500 outline-none [color-scheme:dark]"
               >
                 <option value="auto">Auto Detect</option>
@@ -558,6 +563,7 @@ export default function ClientDetailPage() {
               <input
                 type="number"
                 min={0}
+                aria-label="Sheet Tab Index (0-based)"
                 value={client.payroll_config?.sheet_index ?? 0}
                 onChange={(e) => updateConfig('sheet_index', Number(e.target.value))}
                 className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 font-mono text-sm focus:ring-1 focus:ring-emerald-500 outline-none"
@@ -570,6 +576,7 @@ export default function ClientDetailPage() {
               <input
                 type="number"
                 min={0}
+                aria-label="Header Row (0-based)"
                 value={client.payroll_config?.header_row ?? 0}
                 onChange={(e) => updateConfig('header_row', Number(e.target.value))}
                 className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 font-mono text-sm focus:ring-1 focus:ring-emerald-500 outline-none"
@@ -585,6 +592,7 @@ export default function ClientDetailPage() {
                 type="number"
                 min={0}
                 max={100}
+                aria-label="VAT Rate (%)"
                 value={Math.round((client.payroll_config?.vat_rate ?? 0.15) * 100)}
                 onChange={(e) => updateConfig('vat_rate', Number(e.target.value) / 100)}
                 className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 font-mono text-sm focus:ring-1 focus:ring-emerald-500 outline-none"
@@ -597,6 +605,7 @@ export default function ClientDetailPage() {
               <input
                 type="number"
                 min={0}
+                aria-label="Invoice Markup (%)"
                 value={Math.round((client.payroll_config?.invoice_markup ?? 0) * 100)}
                 onChange={(e) => updateConfig('invoice_markup', Number(e.target.value) / 100)}
                 className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 font-mono text-sm focus:ring-1 focus:ring-emerald-500 outline-none"

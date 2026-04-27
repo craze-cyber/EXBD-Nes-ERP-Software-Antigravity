@@ -108,6 +108,7 @@ export default function AuditLogPage() {
         <select
           value={moduleFilter}
           onChange={e => { setModuleFilter(e.target.value); setPage(1); }}
+          aria-label="Filter by module"
           className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none"
         >
           <option value="all">All Modules</option>
@@ -117,6 +118,7 @@ export default function AuditLogPage() {
         <select
           value={resultFilter}
           onChange={e => { setResultFilter(e.target.value); setPage(1); }}
+          aria-label="Filter by result"
           className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none"
         >
           <option value="all">All Results</option>

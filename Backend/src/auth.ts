@@ -15,13 +15,35 @@ export async function getSessionUser(): Promise<AuthUser | null> {
   const { data: authData } = await auth.getCurrentUser();
   if (!authData?.user) return null;
 
-  const { data: userData, error } = await insforge.database
+  const authId = authData.user.id;
+  const authEmail = authData.user.email;
+
+  // Primary lookup: match by auth_id
+  let { data: userData } = await insforge.database
     .from("erp_users")
     .select("*")
-    .eq("auth_id", authData.user.id)
+    .eq("auth_id", authId)
     .maybeSingle();
 
-  if (error || !userData) return null;
+  // Fallback: match by email (handles accounts created before auth_id was recorded)
+  if (!userData && authEmail) {
+    const { data: byEmail } = await insforge.database
+      .from("erp_users")
+      .select("*")
+      .eq("email", authEmail)
+      .maybeSingle();
+
+    if (byEmail) {
+      userData = byEmail;
+      // Self-heal: write the correct auth_id so future lookups use the fast path
+      await insforge.database
+        .from("erp_users")
+        .update({ auth_id: authId })
+        .eq("id", byEmail.id);
+    }
+  }
+
+  if (!userData) return null;
 
   return userData as AuthUser;
 }
