@@ -25,8 +25,6 @@ export default function PayrollHub() {
     { slug: 'dabdoob-manpower', name: 'Dabdoob Manpower', icon: <HardHat className="w-6 h-6" />, color: 'bg-emerald-600', path: '/payroll/dabdoob-manpower', desc: 'Labor and Overtime calculation' },
     { slug: 'keemart', name: 'Keemart', icon: <Package className="w-6 h-6" />, color: 'bg-indigo-500', path: '/payroll/keemart', desc: 'Logistics delivery calculation' },
     { slug: 'medlog', name: 'Medlog', icon: <Package className="w-6 h-6" />, color: 'bg-red-500', path: '/payroll/universal', desc: 'Specialized logistics processing' },
-    { slug: 'keeta-parser', name: 'Keeta Parser', icon: <FileSpreadsheet className="w-6 h-6" />, color: 'bg-purple-500', path: '/payroll/keeta-parser', desc: 'Raw Keeta Excel to KSA Payable Converter' },
-    { slug: 'nafouz-parser', name: 'Nafouz Parser', icon: <FileSpreadsheet className="w-6 h-6" />, color: 'bg-blue-500', path: '/payroll/nafouz-parser', desc: 'KSA Payable to Nafouz Format' },
     { slug: 'noon-minutes', name: 'Noon Minutes', icon: <Clock className="w-6 h-6" />, color: 'bg-yellow-500', path: '/payroll/noon-minutes', desc: 'Quick commerce delivery payout' },
     { slug: 'noon-supermall', name: 'Noon Supermall', icon: <Building2 className="w-6 h-6" />, color: 'bg-yellow-600', path: '/payroll/noon-supermall', desc: 'Enterprise logistics processing' },
     { slug: 'pran-exbd', name: 'Pran-EX', icon: <Users className="w-6 h-6" />, color: 'bg-teal-500', path: '/payroll/universal', desc: 'Manpower processing EXBD' },
@@ -68,6 +66,30 @@ export default function PayrollHub() {
             </div>
           </Link>
         ))}
+
+        {/* Raw File Parser Module */}
+        <Link 
+          href="/payroll/raw-parser"
+          className="group relative bg-[#121214] border border-white/5 rounded-[2rem] p-8 hover:bg-zinc-900 transition-all duration-500 overflow-hidden shadow-2xl hover:-translate-y-2"
+        >
+          <div className="absolute top-0 right-0 w-32 h-32 bg-fuchsia-500 opacity-5 blur-3xl -mr-16 -mt-16 group-hover:opacity-20 transition-opacity"></div>
+          
+          <div className="w-12 h-12 bg-fuchsia-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500 mb-6">
+            <div className="text-white"><FileSpreadsheet className="w-6 h-6" /></div>
+          </div>
+
+          <div className="space-y-2">
+            <h3 className="text-2xl font-black text-white tracking-tight uppercase group-hover:text-white transition-colors">Raw File Parser</h3>
+            <p className="text-zinc-500 text-sm font-medium">Extract and format Keeta raw payroll files</p>
+          </div>
+
+          <div className="mt-8 flex items-center justify-between">
+             <span className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Enter Module</span>
+             <div className="bg-white/5 p-2 rounded-full group-hover:bg-white group-hover:text-black transition-all">
+                <ChevronRight className="w-4 h-4" />
+             </div>
+          </div>
+        </Link>
 
         {/* Universal Fallback */}
         <Link 
