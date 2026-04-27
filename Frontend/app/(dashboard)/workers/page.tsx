@@ -24,7 +24,7 @@ export default function WorkersPage() {
   
   // Filters
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState<"All" | "Active" | "Idle" | "Terminated" | "None Iqama Worker">("All");
+  const [activeTab, setActiveTab] = useState<"All" | "Active" | "Idle" | "Terminated" | "None Iqama Worker" | "Iqama Expired" | "Iqama Expiring (30d)" | "Iqama Expiring (90d)">("All");
   const [currentPage, setCurrentPage] = useState(1);
 
   const DB_COLUMNS = [
@@ -42,6 +42,14 @@ export default function WorkersPage() {
 
   useEffect(() => {
     fetchData();
+    // Check for query parameters from dashboard
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const filter = params.get("filter");
+      if (filter === "iqama_expired") setActiveTab("Iqama Expired");
+      else if (filter === "iqama_expiring_30") setActiveTab("Iqama Expiring (30d)");
+      else if (filter === "iqama_expiring_90") setActiveTab("Iqama Expiring (90d)");
+    }
   }, []);
 
   const fetchData = async () => {
@@ -90,6 +98,22 @@ export default function WorkersPage() {
     if (activeTab === "Terminated" && w.work_status !== "Terminated") return false;
     if (activeTab === "Idle" && w.work_status !== "Idle") return false;
     if (activeTab === "None Iqama Worker" && w.iqama_no && !w.iqama_no.startsWith("TEMP-")) return false;
+    
+    // Iqama specific filters
+    const now = new Date();
+    const d30 = new Date(now.getTime() + 30 * 86400000);
+    const d90 = new Date(now.getTime() + 90 * 86400000);
+    
+    if (activeTab === "Iqama Expired") {
+      if (!w.iqama_expiry || new Date(w.iqama_expiry) >= now) return false;
+    }
+    if (activeTab === "Iqama Expiring (30d)") {
+      if (!w.iqama_expiry || new Date(w.iqama_expiry) < now || new Date(w.iqama_expiry) > d30) return false;
+    }
+    if (activeTab === "Iqama Expiring (90d)") {
+      if (!w.iqama_expiry || new Date(w.iqama_expiry) <= d30 || new Date(w.iqama_expiry) > d90) return false;
+    }
+
     const query = searchQuery.toLowerCase();
     if (!query) return true;
     return (
@@ -134,7 +158,7 @@ export default function WorkersPage() {
       {/* Control Bar: Search & Tabs */}
       <div className="flex flex-col xl:flex-row gap-4 items-center bg-black/20 p-2 rounded-[28px] border border-white/5">
         <div className="flex w-full xl:w-auto p-1 bg-white/5 rounded-2xl overflow-x-auto hide-scrollbar">
-          {["All", "Active", "Idle", "Terminated", "None Iqama Worker"].map((tab) => (
+          {["All", "Active", "Idle", "Terminated", "None Iqama Worker", "Iqama Expired", "Iqama Expiring (30d)", "Iqama Expiring (90d)"].map((tab) => (
             <button
                key={tab}
                onClick={() => { setActiveTab(tab as any); setCurrentPage(1); }}

@@ -117,11 +117,11 @@ export default function DashboardOverview() {
     const iqamaExpiring90 = w.filter(x => x.iqama_expiry && new Date(x.iqama_expiry) > d30 && new Date(x.iqama_expiry) <= d90);
 
     if (iqamaExpired.length > 0)
-      newAlerts.push({ type: "critical", label: "Iqama Expired", value: iqamaExpired.length, href: "/workers", detail: "workers require immediate renewal" });
+      newAlerts.push({ type: "critical", label: "Iqama Expired", value: iqamaExpired.length, href: "/workers?filter=iqama_expired", detail: "workers require immediate renewal" });
     if (iqamaExpiring30.length > 0)
-      newAlerts.push({ type: "critical", label: "Iqama Expiring (30d)", value: iqamaExpiring30.length, href: "/workers", detail: "workers expiring within 30 days" });
+      newAlerts.push({ type: "critical", label: "Iqama Expiring (30d)", value: iqamaExpiring30.length, href: "/workers?filter=iqama_expiring_30", detail: "workers expiring within 30 days" });
     if (iqamaExpiring90.length > 0)
-      newAlerts.push({ type: "warning", label: "Iqama Expiring (90d)", value: iqamaExpiring90.length, href: "/workers", detail: "workers expiring within 90 days" });
+      newAlerts.push({ type: "warning", label: "Iqama Expiring (90d)", value: iqamaExpiring90.length, href: "/workers?filter=iqama_expiring_90", detail: "workers expiring within 90 days" });
 
     // Compliance docs
     const docs = compliance || [];
