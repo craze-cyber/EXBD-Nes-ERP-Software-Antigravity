@@ -25,6 +25,7 @@ export default function PayrollHub() {
     { slug: 'dabdoob-manpower', name: 'Dabdoob Manpower', icon: <HardHat className="w-6 h-6" />, color: 'bg-emerald-600', path: '/payroll/dabdoob-manpower', desc: 'Labor and Overtime calculation' },
     { slug: 'keemart', name: 'Keemart', icon: <Package className="w-6 h-6" />, color: 'bg-indigo-500', path: '/payroll/keemart', desc: 'Logistics delivery calculation' },
     { slug: 'medlog', name: 'Medlog', icon: <Package className="w-6 h-6" />, color: 'bg-red-500', path: '/payroll/universal', desc: 'Specialized logistics processing' },
+    { slug: 'keeta-parser', name: 'Keeta Parser', icon: <FileSpreadsheet className="w-6 h-6" />, color: 'bg-purple-500', path: '/payroll/keeta-parser', desc: 'Raw Keeta Excel to KSA Payable Converter' },
     { slug: 'noon-minutes', name: 'Noon Minutes', icon: <Clock className="w-6 h-6" />, color: 'bg-yellow-500', path: '/payroll/noon-minutes', desc: 'Quick commerce delivery payout' },
     { slug: 'noon-supermall', name: 'Noon Supermall', icon: <Building2 className="w-6 h-6" />, color: 'bg-yellow-600', path: '/payroll/noon-supermall', desc: 'Enterprise logistics processing' },
     { slug: 'pran-exbd', name: 'Pran-EX', icon: <Users className="w-6 h-6" />, color: 'bg-teal-500', path: '/payroll/universal', desc: 'Manpower processing EXBD' },
